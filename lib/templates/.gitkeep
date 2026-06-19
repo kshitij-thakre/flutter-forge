@@ -1,0 +1,3 @@
+# Responsibility:
+# Stores text/code templates used by the project and feature generators.
+# Files inside this folder are copied or read to generate standard skeletons (e.g. repositories, blocs, screens).
