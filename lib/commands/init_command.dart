@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter_forge/services/flutter_service.dart';
+import 'package:flutter_forge/generators/project_generator.dart';
 
 class InitCommand {
   final String name = 'init';
@@ -9,6 +11,13 @@ class InitCommand {
     if (!nameRegex.hasMatch(projectName)) {
       print('Invalid project name.');
       print('Project names must contain lowercase letters, numbers and underscores only.');
+      return;
+    }
+
+    final directory = Directory(projectName);
+    if (await directory.exists()) {
+      print('Project already exists.');
+      print('Choose another name or delete the existing directory.');
       return;
     }
 
@@ -30,6 +39,18 @@ class InitCommand {
     try {
       await flutterService.createFlutterProject(projectName);
       print('Project created successfully.');
+      
+      print('Injecting architecture...');
+      final generator = ProjectGenerator();
+      await generator.injectArchitectureFolders(projectName);
+      print('Architecture injected successfully.');
+
+      print('Scaffolding foundation templates...');
+      await generator.scaffoldAppException(projectName);
+      await generator.scaffoldApiResult(projectName);
+      await generator.scaffoldExceptionMapper(projectName);
+      await generator.scaffoldDioClient(projectName);
+      print('Foundation templates created.');
     } catch (e) {
       print('Failed to create Flutter project: $e');
     }
