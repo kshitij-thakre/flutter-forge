@@ -1,71 +1,71 @@
 # Flutter Forge 🛠️
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Pub Version](https://img.shields.io/pub/v/flutter_forge.svg)](https://pub.dev/packages/flutter_forge)
-[![Dart SDK](https://img.shields.io/badge/dart-%3E%3D3.0.0-blue.svg)](https://dart.dev)
-[![Flutter](https://img.shields.io/badge/flutter-%3E%3D3.10.0-blue.svg)](https://flutter.dev)
-
-**Flutter Forge** is a developer-first Dart CLI tool designed to solve **Day 0 setup friction** in Flutter applications. Instead of wasting hours configuring directory trees, copying boilerplate networking files, wiring up route definitions, or setting up environments, Flutter Forge does it for you in seconds—generating a clean, production-ready architecture.
+**Flutter Forge** is an open-source Dart CLI tool designed to solve **Day 0 setup friction** in Flutter applications by automating project structure and boilerplate scaffolding.
 
 ---
 
-## 📖 Core Philosophy
+## What is Flutter Forge?
 
-> **"Flutter Forge extends Flutter; it never replaces it."**
-
-Flutter Forge is built on strict boundaries of responsibility:
-*   **Forge owns the application architecture** (directory layout, HTTP client abstractions, standardized exception handling, dependency injection configurations, environment separation).
-*   **Flutter owns the platform code** (native runners, platform channels, rendering engine, and core SDK integrations).
-
-By generating standard, boilerplate-free Dart code and configuration files, Flutter Forge leaves **zero tool lock-in**. If you decide to stop using Forge, your app remains 100% standard Flutter.
+Flutter Forge is a developer-first tool built to scaffold standardized architectures for new Flutter projects. It never replaces Flutter; it extends it by owning the application folder design and generating minimal, clean architecture skeletons.
 
 ---
 
-## 🚀 Key Features
+## Features
 
-*   📂 **Consistent Folder Structure**: Generates a standardized, feature-first structure that scales seamlessly from small projects to enterprise monorepos.
-*   🔌 **Dio Networking Layer**: A pre-configured, resilient HTTP client featuring robust interceptors, SSL pinning placeholders, and automatic token refreshing.
-*   🛡️ **Standardized Exception Handling**: Converts low-level HTTP/Dio errors into human-readable, domain-specific domain exceptions right out of the box.
-*   🚦 **Declarative Route Orchestration**: A clean, scalable route configuration system leveraging `go_router` or standard router patterns, modularized by feature.
-*   🌍 **Flavor-Ready Environments**: Multi-flavor environment configuration (`dev`, `staging`, `prod`) using `.env` files and entry points without platform-level friction.
-*   ⚡ **Feature Module Generation**: Scaffolds new feature modules with structured presentation, domain, and data layers instantly.
+*   📂 **Consistent Folder Structure**: Feature-first layout dividing logic into app, core, and features folders.
+*   🔌 **Dio Networking Layer**: Pre-configured HTTP client setups with standard exceptions.
+*   🛡️ **Standardized Exception Handling**: Converts low-level errors into human-readable domain-specific exceptions.
+*   🚦 **Router Scaffolding**: Declarative routing structures prepared for navigation configurations.
+*   🌍 **Environment Setup**: Standard entry configurations for developmental configurations.
+*   ⚡ **Feature Module Scaffolding**: Generate standard layered feature architectures on demand.
 
 ---
 
-## 🛠️ V1 Commands
-
-Using Flutter Forge is extremely straightforward:
+## Quick Start
 
 ### 1. Initialize a Project
-Create a new Flutter project pre-configured with the Flutter Forge architecture:
+Create a new project pre-configured with the Flutter Forge structure:
 ```bash
-forge init my_app
+dart run bin/forge.dart init my_app
 ```
 
-### 2. Generate a Feature Module
-Scaffold a complete, layered feature module (e.g., authentication) and register its routes automatically:
+### 2. Scaffold a Feature
+Add a new layered feature module to your existing project:
 ```bash
-forge add feature auth
+cd my_app
+dart ../bin/forge.dart add feature auth
 ```
 
 ---
 
-## 📂 Documentation Index
+## Architecture
 
-To understand the full architecture, scope, and direction of Flutter Forge, explore our technical documentation:
+Flutter Forge structures generated code inside target projects using the following layer separation:
 
-1.  **[Product Specification](file:///Users/kshitijthakre/Apps/flutter-forge/PRODUCT_SPEC.md)**: Product details, CLI command syntax, and targeted user problems.
-2.  **[V1 Scope](file:///Users/kshitijthakre/Apps/flutter-forge/V1_SCOPE.md)**: Explicit list of what is included, what is excluded, and success metrics for our initial release.
-3.  **[Architecture Principles](file:///Users/kshitijthakre/Apps/flutter-forge/ARCHITECTURE_PRINCIPLES.md)**: In-depth breakdown of Clean Architecture layers, networking patterns, error mapping, and state boundaries.
-4.  **[Folder Structure](file:///Users/kshitijthakre/Apps/flutter-forge/FOLDER_STRUCTURE.md)**: Detailed directory tree mapping and file-by-file explanations.
-5.  **[Project Roadmap](file:///Users/kshitijthakre/Apps/flutter-forge/ROADMAP.md)**: Visualizing the phases from V1 foundation to enterprise scaling.
+```text
+lib/
+├── app/          # Configurations and routing tables
+├── core/         # Reusable foundation wrappers (network, exceptions, storage, services, utils)
+├── features/     # Feature-level business modules (each with data, domain, and presentation layers)
+└── main.dart     # Application entrypoint
+```
+
+For a comprehensive explanation of how this works, see [Getting Started](file:///Users/kshitijthakre/Apps/flutter-forge/docs/GETTING_STARTED.md) and [Architecture Guide](file:///Users/kshitijthakre/Apps/flutter-forge/docs/ARCHITECTURE.md).
 
 ---
 
-## 🤝 Contributing
+## Roadmap
 
-We welcome contributions from the open-source community! Please see our [Roadmap](file:///Users/kshitijthakre/Apps/flutter-forge/ROADMAP.md) to understand current priorities. If you encounter any bugs, feel free to open an issue or submit a pull request.
+### Upcoming
+*   Documentation improvements
+*   QA & Release
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](file:///Users/kshitijthakre/Apps/flutter-forge/LICENSE) file for details.
+### Future Releases
+*   Firebase
+*   CI/CD
+*   Localization
+*   Analytics
+*   Docker
+*   Azure
+*   AI Integrations
+*   Plugin Marketplace
