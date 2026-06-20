@@ -4,6 +4,7 @@
 
 import 'dart:io';
 import 'package:flutter_forge/commands/init_command.dart';
+import 'package:flutter_forge/commands/add_feature_command.dart';
 
 void main(List<String> arguments) async {
   if (arguments.isEmpty) {
@@ -19,6 +20,13 @@ void main(List<String> arguments) async {
     }
     final projectName = arguments[1];
     await InitCommand.execute(projectName);
+  } else if (command == 'add') {
+    if (arguments.length < 3 || arguments[1] != 'feature') {
+      print('Usage: forge add feature <feature_name>');
+      exit(1);
+    }
+    final featureName = arguments[2];
+    await AddFeatureCommand.execute('.', featureName);
   } else {
     print('Unknown command: $command');
     exit(1);
