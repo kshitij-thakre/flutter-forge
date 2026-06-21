@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:flutter_forge/generators/feature_generator.dart';
+import 'package:flutter_forge_cli/generators/feature_generator.dart';
 
 class AddFeatureCommand {
   final String name = 'add';

@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'package:flutter_forge/services/flutter_service.dart';
-import 'package:flutter_forge/generators/project_generator.dart';
+import 'package:flutter_forge_cli/services/flutter_service.dart';
+import 'package:flutter_forge_cli/generators/project_generator.dart';
 
 class InitCommand {
   final String name = 'init';
