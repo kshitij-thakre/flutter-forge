@@ -16,6 +16,21 @@ class InitCommand {
   final String name = 'init';
   final String description = 'Initialize a new Flutter project pre-configured with the Forge architecture.';
 
+  static String _friendlyLabel(String original) {
+    final trimmed = original.trim();
+    if (trimmed == 'Persistent session architecture' ||
+        trimmed == 'Persistent Session Strategy' ||
+        trimmed == 'Persistent session') {
+      return 'Persistent Session';
+    }
+    if (trimmed == 'Environment configuration setup' ||
+        trimmed == 'Environment Configuration Strategy' ||
+        trimmed == 'Environment configuration') {
+      return 'Dev + Stage + Production';
+    }
+    return trimmed;
+  }
+
   static Future<void> execute(String projectName) async {
     final nameRegex = RegExp(r'^[a-z][a-z0-9_]*$');
     if (!nameRegex.hasMatch(projectName)) {
@@ -72,8 +87,8 @@ class InitCommand {
     print('==================================================');
     print('State Management:     ${overrideStateManagement ?? recommendation.recommendedStateManagement}');
     print('Routing Solution:     ${overrideRouting ?? recommendation.recommendedRouting}');
-    print('Session Strategy:     ${recommendation.sessionStrategy}');
-    print('Environment Strategy: ${recommendation.environmentStrategy}');
+    print('Session Strategy:     ${_friendlyLabel(recommendation.sessionStrategy)}');
+    print('Environment Strategy: ${_friendlyLabel(recommendation.environmentStrategy)}');
     print('==================================================\n');
 
     // 4. Developer Override Prompt
@@ -124,29 +139,36 @@ class InitCommand {
       return;
     }
 
-    print('\nFinalizing Project Blueprint...');
-    print(blueprint);
+    print('\nGenerating Final Project Blueprint...');
+    print('====================================');
+    print('Final Project Blueprint');
+    print('====================================');
+    print('State Management:     ${blueprint.stateManagement}');
+    print('Routing Solution:     ${blueprint.routing}');
+    print('Session Strategy:     ${_friendlyLabel(blueprint.sessionStrategy)}');
+    print('Environment Strategy: ${_friendlyLabel(blueprint.environmentStrategy)}');
+    print('====================================');
 
     // 6. Flutter Project Creation
-    print('\nCreating Flutter project structure...');
+    print('\nCreating Flutter project...');
     await flutterService.createFlutterProject(projectName);
-    print('Project created successfully.');
+    print('Flutter project created.');
 
     // 7. Persistence
-    print('Saving configuration file...');
+    print('Saving configuration...');
     final configService = ConfigurationService();
     await configService.save('$projectName/forge_config.json', projectConfig);
-    print('Configuration saved to $projectName/forge_config.json.');
+    print('Configuration saved.');
 
     // 8. Inject Base Architecture folders
-    print('Injecting architecture layers...');
+    print('Generating Architecture Layers...');
     final projectGenerator = ProjectGenerator();
     await projectGenerator.injectArchitectureFolders(projectName);
     await projectGenerator.scaffoldAppException(projectName);
     await projectGenerator.scaffoldApiResult(projectName);
     await projectGenerator.scaffoldExceptionMapper(projectName);
     await projectGenerator.scaffoldDioClient(projectName);
-    print('Architecture layers injected.');
+    print('Architecture layers generated.');
 
     // 9. Specific Generators execution
     print('Generating architecture modules...');
@@ -179,14 +201,15 @@ class InitCommand {
       packages.addAll(List<String>.from(envMeta['packagesToAdd']));
     }
 
-    print('Installing aggregated dependencies: ${packages.join(", ")}...');
+    print('Installing dependencies: ${packages.join(", ")}...');
     final installer = PackageInstallerService();
     await installer.install(projectName, packages.toList());
-    print('Dependencies installed successfully.');
-    print('\nIronship Project Initialization complete!');
+    print('Dependencies installed.');
+    print('\nProject initialization complete!');
   }
 
   Future<void> run(List<String> arguments) async {
     // TODO: Parse options like project name, custom state management or routing package.
   }
 }
+

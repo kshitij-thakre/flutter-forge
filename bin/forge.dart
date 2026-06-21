@@ -8,12 +8,15 @@ import 'package:ironship/commands/add_feature_command.dart';
 
 void main(List<String> arguments) async {
   if (arguments.isEmpty) {
-    print('Usage: forge init <project_name>');
+    _printHelp();
     exit(0);
   }
 
   final command = arguments.first;
-  if (command == 'init') {
+  if (command == '--help' || command == '-h') {
+    _printHelp();
+    exit(0);
+  } else if (command == 'init') {
     if (arguments.length < 2) {
       print('Usage: forge init <project_name>');
       exit(1);
@@ -31,4 +34,12 @@ void main(List<String> arguments) async {
     print('Unknown command: $command');
     exit(1);
   }
+}
+
+void _printHelp() {
+  print('Ironship CLI\n');
+  print('Commands:\n');
+  print('forge init <project_name>\n');
+  print('Examples:\n');
+  print('forge init hospital_app');
 }
