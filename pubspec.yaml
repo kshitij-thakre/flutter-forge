@@ -1,6 +1,6 @@
 name: flutter_forge
 description: A Dart CLI tool that solves Day 0 setup problems in Flutter development.
-version: 1.0.0
+version: 1.0.1
 homepage: https://github.com/kshitij-thakre/flutter-forge
 
 environment:
