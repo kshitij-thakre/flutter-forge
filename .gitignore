@@ -27,3 +27,8 @@ doc/api/
 
 .flutter-plugins
 .flutter-plugins-dependencies
+
+# AI working artifacts
+task.md
+walkthrough.md
+
