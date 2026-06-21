@@ -1,61 +1,106 @@
 # Changelog
 
-All notable changes to the Flutter Forge project will be documented in this file.
+All notable changes to Flutter Forge will be documented in this file.
+
+The format is inspired by Keep a Changelog and follows semantic versioning principles.
 
 ---
-## v1.0.1
+## v1.0.2 - 2026-06-21
 
-### Fixed
+### Improved
 
-* Automatic dependency installation during `forge init`.
-* Generated Flutter projects now install `dio` automatically.
-* Fixed consumer onboarding flow discovered during external acceptance testing.
+- Added global installation instructions
+- Added PATH configuration guides for macOS, Linux and Windows
+- Added troubleshooting section for `forge: command not found`
+- Updated onboarding documentation
+- Improved first-time user experience
+
+## v1.0.1 - 2026-06-21
+
+
+- Added automatic dependency installation during `forge init`.
+- Generated Flutter projects now install required packages automatically (`dio`).
+- Improved first-time consumer onboarding experience discovered during external acceptance testing.
 
 ### Verified
 
-* External repository cloning.
-* Project initialization.
-* Architecture injection.
-* Foundation template generation.
-* Feature generation.
-* Duplicate protection.
-* `flutter analyze`.
-* `dart analyze`.
+- External repository cloning.
+- Project initialization.
+- Architecture injection.
+- Foundation template generation.
+- Feature generation.
+- Duplicate project protection.
+- Duplicate feature protection.
+- `flutter analyze` validation.
+- `dart analyze` validation.
+- Invalid command handling.
 
+---
 
-## v1.0.0
+## v1.0.0 - 2026-06-20
 
-### Features
-*   **`forge init`**: Scaffold structured Flutter projects.
-*   **`forge add feature`**: Scaffolds clean architecture folders inside existing features.
+### Added
 
-### Completed
-*   **Architecture Injector**: Standard directory separations.
-*   **Foundation Templates**: Generation of custom exception models and clients.
-*   **Feature Generator**: Scaffolding layered Presentation, Domain, and Data modules.
-*   **Documentation Suite**: Detailed architecture design docs.
-*   **QA Verification**: Comprehensive E2E tests.
+#### CLI Commands
+
+- `forge init <project_name>`
+- `forge add feature <feature_name>`
+
+#### Core Features
+
+- Golden Flutter project architecture.
+- Architecture injector.
+- Foundation template generator.
+- Feature generator.
+- Documentation suite.
+- End-to-end QA verification.
 
 ---
 
 ## v0.4.0-documentation-complete
-*   Completed detailed guide books for CLI subcommands, architecture mapping, and release workflows.
+
+### Added
+
+- CLI command documentation.
+- Architecture documentation.
+- Release workflow documentation.
+- Developer onboarding guides.
 
 ---
 
 ## v0.3.0-feature-generator
-*   Implemented `forge add feature` parser hooks.
-*   Automated layering for Presentation, Domain, and Data layers.
-*   Prevented duplicate feature name folders.
+
+### Added
+
+- `forge add feature` command parser.
+- Automated Clean Architecture feature generation.
+- Duplicate feature protection.
+
+### Generated Structure
+
+- Data layer
+- Domain layer
+- Presentation layer
 
 ---
 
 ## v0.2.0-foundation-complete
-*   Integrated processes checking host Flutter SDK PATH variables.
-*   Created default `app_exception.dart`, `exception_mapper.dart`, `api_result.dart`, and `dio_client.dart` templates.
+
+### Added
+
+- Flutter SDK environment validation.
+- `app_exception.dart`
+- `exception_mapper.dart`
+- `api_result.dart`
+- `dio_client.dart`
 
 ---
 
 ## v0.1.0-walking-skeleton
-*   Initial project setup.
-*   Implemented command parsing shells and argument validation.
+
+### Added
+
+- Initial Flutter Forge project setup.
+- CLI command parsing.
+- Argument validation.
+- Project repository structure.

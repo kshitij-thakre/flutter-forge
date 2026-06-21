@@ -1,7 +1,10 @@
 name: ironship
-description: A Dart CLI tool that solves Day 0 setup problems in Flutter development.
+description: A developer-first Flutter scaffolding CLI that simplifies Day 0 setup, generates production-ready architecture, foundation templates, and feature modules.
 version: 1.0.2
 homepage: https://github.com/kshitij-thakre/flutter-forge
+repository: https://github.com/kshitij-thakre/flutter-forge
+issue_tracker: https://github.com/kshitij-thakre/flutter-forge/issues
+documentation: https://github.com/kshitij-thakre/flutter-forge/tree/main/doc
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
