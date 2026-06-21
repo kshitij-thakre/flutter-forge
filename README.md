@@ -21,19 +21,73 @@ Flutter Forge is a developer-first tool built to scaffold standardized architect
 
 ---
 
-## Quick Start
+## Installation
 
-### 1. Initialize a Project
-Create a new project pre-configured with the Flutter Forge structure:
+Install **Ironship** globally via `pub.dev`:
+
 ```bash
-dart run bin/forge.dart init my_app
+dart pub global activate ironship
 ```
 
-### 2. Scaffold a Feature
-Add a new layered feature module to your existing project:
+### PATH Configuration
+
+If the `forge` command is not found after activation, add the Dart SDK global bin folder to your system `PATH`:
+
+#### macOS & Linux (zsh/bash)
+Run the following to add it for the current session:
 ```bash
-cd my_app
-dart ../bin/forge.dart add feature auth
+export PATH="$PATH":"$HOME/.pub-cache/bin"
+```
+
+To configure it permanently, add it to your shell configuration (e.g., `~/.zshrc` or `~/.bashrc`):
+1. Open the configuration file:
+   ```bash
+   nano ~/.zshrc
+   ```
+2. Paste the following line at the end:
+   ```bash
+   export PATH="$PATH":"$HOME/.pub-cache/bin"
+   ```
+3. Save and reload the shell:
+   ```bash
+   source ~/.zshrc
+   ```
+
+#### Windows
+1. Open the **Start Menu** and search for **Environment Variables**.
+2. Select **Edit the system environment variables**.
+3. Click on the **Environment Variables...** button.
+4. Under **User variables**, select `Path` and click **Edit**.
+5. Click **New** and add the following folder (replace `<Username>` with your Windows account name):
+   ```text
+   %USERPROFILE%\AppData\Local\Pub\Cache\bin
+   ```
+6. Click **OK** to save all dialogs, then restart your terminal.
+
+### Troubleshooting
+If you receive the error `forge: command not found` after running the activation script, it indicates your terminal cannot find the executable in the system `PATH`. Make sure the PATH configuration steps above have been applied and your terminal session has been restarted/reloaded.
+
+---
+
+## Quick Start
+
+### 1. Verify Installation
+```bash
+forge
+```
+
+### 2. Initialize a Project
+Create a new project pre-configured with the standard architecture:
+```bash
+forge init demo_app
+```
+
+### 3. Scaffold a Feature
+Navigate to the project directory, verify code health, and add a Clean Architecture module:
+```bash
+cd demo_app
+flutter analyze
+forge add feature auth
 ```
 
 ---

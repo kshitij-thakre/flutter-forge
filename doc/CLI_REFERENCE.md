@@ -11,7 +11,7 @@ Initializes a new standard Flutter project pre-configured with the Flutter Forge
 
 ### Usage
 ```bash
-dart run bin/forge.dart init <project_name>
+forge init <project_name>
 ```
 
 ### Validation Rules
@@ -28,7 +28,7 @@ Scaffolds the Clean Architecture subfolders for a new feature module under the `
 
 ### Usage
 ```bash
-dart ../bin/forge.dart add feature <feature_name>
+forge add feature <feature_name>
 ```
 
 ### Validation Rules
