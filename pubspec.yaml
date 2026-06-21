@@ -1,4 +1,4 @@
-name: flutter_forge_cli
+name: ironship
 description: A Dart CLI tool that solves Day 0 setup problems in Flutter development.
 version: 1.0.1
 homepage: https://github.com/kshitij-thakre/flutter-forge

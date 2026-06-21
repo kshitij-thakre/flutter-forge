@@ -3,8 +3,8 @@
 /// Parses command line arguments and dispatches commands.
 
 import 'dart:io';
-import 'package:flutter_forge_cli/commands/init_command.dart';
-import 'package:flutter_forge_cli/commands/add_feature_command.dart';
+import 'package:ironship/commands/init_command.dart';
+import 'package:ironship/commands/add_feature_command.dart';
 
 void main(List<String> arguments) async {
   if (arguments.isEmpty) {
