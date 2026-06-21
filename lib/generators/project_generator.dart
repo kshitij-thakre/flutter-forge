@@ -140,6 +140,31 @@ class DioClient {
     }
   }
 
+  Future<void> installDependencies(String projectPath) async {
+    final dependencies = [
+      'dio',
+    ];
+
+    final baseDir = projectPath.endsWith('/')
+        ? projectPath.substring(0, projectPath.length - 1)
+        : projectPath;
+
+    final result = await Process.run(
+      'flutter',
+      ['pub', 'add', ...dependencies],
+      workingDirectory: baseDir,
+    );
+
+    if (result.exitCode != 0) {
+      throw ProcessException(
+        'flutter',
+        ['pub', 'add', ...dependencies],
+        result.stderr as String,
+        result.exitCode,
+      );
+    }
+  }
+
   Future<void> generate({
     required String projectName,
     required String path,

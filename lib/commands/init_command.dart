@@ -45,6 +45,10 @@ class InitCommand {
       await generator.injectArchitectureFolders(projectName);
       print('Architecture injected successfully.');
 
+      print('Installing dependencies...');
+      await generator.installDependencies(projectName);
+      print('Dependencies installed successfully.');
+
       print('Scaffolding foundation templates...');
       await generator.scaffoldAppException(projectName);
       await generator.scaffoldApiResult(projectName);
