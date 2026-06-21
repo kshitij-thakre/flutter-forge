@@ -1,125 +1,181 @@
-# Flutter Forge 🛠️
+# Ironship ⚓
 
-**Flutter Forge** is an open-source Dart CLI tool designed to solve **Day 0 setup friction** in Flutter applications by automating project structure and boilerplate scaffolding.
+Developer-first Flutter scaffolding CLI that generates production-ready architecture, foundation templates, and feature modules.
+
+Ironship (formerly Flutter Forge) is a powerful developer-first command-line interface (CLI) for Flutter. It is designed to eliminate project initialization friction and enforce Clean Architecture standards. By automating baseline project setups, configuration directory layouts, core dependencies installation, and layered feature scaffolding, Ironship saves hours of development configuration on Day 0.
 
 ---
 
-## What is Flutter Forge?
+## Why Ironship?
 
-Flutter Forge is a developer-first tool built to scaffold standardized architectures for new Flutter projects. It never replaces Flutter; it extends it by owning the application folder design and generating minimal, clean architecture skeletons.
+Every mobile developer face structural hurdles when starting a new Flutter project:
+- **Repetitive Flutter setup**: Initializing files, configuring build targets, and executing boilerplate terminal scripts.
+- **Recreating architecture**: Setting up directory structures, routing templates, and configuration paths manually.
+- **Recreating boilerplate**: Writing base HTTP clients, exception handlers, and custom logging wrappers.
+- **Manual folder creation**: Manually configuring presentation, domain, and data layers every time a new feature is added.
+- **Dependency setup**: Correctly linking, adding, and resolving required packages like `dio` to ensure basic configurations compile.
+
+Ironship solves these problems by providing immediate scaffolding:
+*   **Rapid Initialization**: Auto-validates your system SDK, runs standard Flutter project creation, and sets up directories in one step.
+*   **Clean Architecture**: Bootstraps decoupling configurations, routing tables, and core layers.
+*   **Foundation Boilerplate**: Injects ready-to-use classes for network requests and application-level exceptions.
+*   **Automatic Dependency Resolution**: Pulls in essential base packages to ensure newly generated apps compile out-of-the-box.
+*   **Zero Locking**: Generates standard Dart and Flutter files with absolutely no proprietary runtimes or tool locks.
 
 ---
 
 ## Features
 
-*   📂 **Consistent Folder Structure**: Feature-first layout dividing logic into app, core, and features folders.
-*   🔌 **Dio Networking Layer**: Pre-configured HTTP client setups with standard exceptions.
-*   🛡️ **Standardized Exception Handling**: Converts low-level errors into human-readable domain-specific exceptions.
-*   🚦 **Router Scaffolding**: Declarative routing structures prepared for navigation configurations.
-*   🌍 **Environment Setup**: Standard entry configurations for developmental configurations.
-*   ⚡ **Feature Module Scaffolding**: Generate standard layered feature architectures on demand.
+*   ✅ **Project generation**: Validates system environment and bootstraps a clean Flutter application.
+*   ✅ **Clean architecture injection**: Organizes structure separating config layers, core infrastructure, and modules.
+*   ✅ **Foundation template generation**: Generates baseline classes like `dio_client.dart` and `app_exception.dart`.
+*   ✅ **Automatic dependency installation**: Installs required external libraries automatically.
+*   ✅ **Feature generation**: Recursively structures data, domain, and presentation packages for new features.
+*   ✅ **Duplicate protection**: Built-in verification logic blocks accidental overwriting of existing projects or modules.
 
 ---
 
 ## Installation
 
-Install **Ironship** globally via `pub.dev`:
+Global installation.
 
 ```bash
 dart pub global activate ironship
 ```
 
-### PATH Configuration
+---
 
-If the `forge` command is not found after activation, add the Dart SDK global bin folder to your system `PATH`:
+## PATH Setup
 
-#### macOS & Linux (zsh/bash)
-Run the following to add it for the current session:
+### macOS (zsh)
+
 ```bash
-export PATH="$PATH":"$HOME/.pub-cache/bin"
+echo 'export PATH="$PATH:$HOME/.pub-cache/bin"' >> ~/.zshrc
+
+source ~/.zshrc
 ```
 
-To configure it permanently, add it to your shell configuration (e.g., `~/.zshrc` or `~/.bashrc`):
-1. Open the configuration file:
-   ```bash
-   nano ~/.zshrc
-   ```
-2. Paste the following line at the end:
-   ```bash
-   export PATH="$PATH":"$HOME/.pub-cache/bin"
-   ```
-3. Save and reload the shell:
-   ```bash
-   source ~/.zshrc
-   ```
+### Linux
 
-#### Windows
+```bash
+echo 'export PATH="$PATH:$HOME/.pub-cache/bin"' >> ~/.bashrc
+
+source ~/.bashrc
+```
+
+### Windows
+
+To configure the PATH environment variable on Windows:
 1. Open the **Start Menu** and search for **Environment Variables**.
 2. Select **Edit the system environment variables**.
-3. Click on the **Environment Variables...** button.
+3. Click the **Environment Variables...** button.
 4. Under **User variables**, select `Path` and click **Edit**.
-5. Click **New** and add the following folder (replace `<Username>` with your Windows account name):
+5. Click **New** and add the following directory path:
    ```text
    %USERPROFILE%\AppData\Local\Pub\Cache\bin
    ```
-6. Click **OK** to save all dialogs, then restart your terminal.
-
-### Troubleshooting
-If you receive the error `forge: command not found` after running the activation script, it indicates your terminal cannot find the executable in the system `PATH`. Make sure the PATH configuration steps above have been applied and your terminal session has been restarted/reloaded.
+6. Click **OK** on all windows to save the changes, then restart your terminal.
 
 ---
 
 ## Quick Start
 
-### 1. Verify Installation
 ```bash
-forge
-```
+forge init hospital_app
 
-### 2. Initialize a Project
-Create a new project pre-configured with the standard architecture:
-```bash
-forge init demo_app
-```
+cd hospital_app
 
-### 3. Scaffold a Feature
-Navigate to the project directory, verify code health, and add a Clean Architecture module:
-```bash
-cd demo_app
-flutter analyze
 forge add feature auth
+
+forge add feature dashboard
+
+flutter analyze
 ```
 
 ---
 
-## Architecture
+## Generated Architecture
 
-Flutter Forge structures generated code inside target projects using the following layer separation:
+Clean architecture layout generated by Ironship:
 
 ```text
-lib/
-├── app/          # Configurations and routing tables
-├── core/         # Reusable foundation wrappers (network, exceptions, storage, services, utils)
-├── features/     # Feature-level business modules (each with data, domain, and presentation layers)
-└── main.dart     # Application entrypoint
+my_app/
+└── lib/
+    ├── main.dart             # Main entry point (generated by Flutter)
+    ├── app/                  # Application-wide routing and configuration
+    │   ├── config/           # General application configs
+    │   └── routes/           # Application-wide routes
+    ├── core/                 # Shared infrastructure layers
+    │   ├── exceptions/       # Custom Exception definitions and mapper
+    │   │   ├── app_exception.dart
+    │   │   └── exception_mapper.dart
+    │   ├── network/          # Networking client and api result wrapper
+    │   │   ├── api_result.dart
+    │   │   └── dio_client.dart
+    │   ├── services/         # Application helper services
+    │   ├── storage/          # Local storage wrappers
+    │   └── utils/            # Shared utilities
+    └── features/             # Business modules (scaffolded via CLI)
+        └── <feature_name>/
+            ├── data/         # Repositories implementations, models, and data sources
+            │   ├── datasources/
+            │   ├── models/
+            │   └── repositories/
+            ├── domain/       # Entities, usecases, and repository interfaces
+            │   ├── entities/
+            │   ├── repositories/
+            │   └── usecases/
+            └── presentation/ # View layer (screens, widgets, state controllers)
+                ├── screens/
+                ├── state/
+                └── widgets/
 ```
 
-For a comprehensive explanation of how this works, see [Getting Started](file:///Users/kshitijthakre/Apps/flutter-forge/docs/GETTING_STARTED.md) and [Architecture Guide](file:///Users/kshitijthakre/Apps/flutter-forge/docs/ARCHITECTURE.md).
+Brief breakdown:
+*   `lib/app/`: Handles application-level routing tables and configuration files.
+*   `lib/core/`: Houses reusable cross-cutting infrastructure logic shared across different features.
+*   `lib/features/`: Contains business feature modules divided into domain, data, and presentation folders.
+
+---
+
+## Verification
+
+Provide E2E verification flow.
+
+```bash
+forge
+
+forge init demo_app
+
+cd demo_app
+
+flutter analyze
+
+forge add feature auth
+```
+
+Expected result:
+
+No issues found.
 
 ---
 
 ## Roadmap
 
-### Upcoming
-*   Documentation improvements
-*   QA & Release
+Upcoming features and improvements planned for future releases:
+- **CI/CD support**: Pre-configured setup pipelines (GitHub Actions, GitLab CI).
+- **Flavor management**: Native configurations for environment flavors (Dev, Staging, Prod).
+- **Environment management**: Configurable runtime settings and env file configurations.
+- **Testing workflows**: Scaffolded unit tests, integration test configurations, and testing templates.
 
-### Future Releases
-*   Firebase
-*   CI/CD
-*   Localization
-*   Analytics
-*   Docker
-*   Azure
-*   AI Integrations
-*   Plugin Marketplace
+---
+
+## Contributing
+
+Contributions are welcome! Please review [CONTRIBUTING.md](file:///Users/kshitijthakre/Apps/flutter-forge/CONTRIBUTING.md) to learn how to open issues, implement features, or submit pull requests.
+
+---
+
+## License
+
+MIT License. See [LICENSE](file:///Users/kshitijthakre/Apps/flutter-forge/LICENSE) for more details.
