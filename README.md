@@ -1,5 +1,7 @@
 # Ironship ⚓
 
+[![Pub Version](https://img.shields.io/pub/v/ironship)](https://pub.dev/packages/ironship) [![Dart](https://img.shields.io/badge/Dart-3.0+-0175C2)](https://dart.dev) [![Flutter](https://img.shields.io/badge/Flutter-compatible-02569B)](https://flutter.dev) [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE) [![Status](https://img.shields.io/badge/status-active-success)](#)
+
 Developer-first Flutter scaffolding CLI that generates production-ready architecture, foundation templates, and feature modules.
 
 Ironship (formerly Flutter Forge) is a powerful developer-first command-line interface (CLI) for Flutter. It is designed to eliminate project initialization friction and enforce Clean Architecture standards. By automating baseline project setups, configuration directory layouts, core dependencies installation, and layered feature scaffolding, Ironship saves hours of development configuration on Day 0.
@@ -172,10 +174,14 @@ Upcoming features and improvements planned for future releases:
 
 ## Contributing
 
-Contributions are welcome! Please review [CONTRIBUTING.md](file:///Users/kshitijthakre/Apps/flutter-forge/CONTRIBUTING.md) to learn how to open issues, implement features, or submit pull requests.
+Contributions are welcome! Please review [CONTRIBUTING.md](CONTRIBUTING.md) to learn how to open issues, implement features, or submit pull requests.
 
 ---
 
 ## License
 
-MIT License. See [LICENSE](file:///Users/kshitijthakre/Apps/flutter-forge/LICENSE) for more details.
+MIT License. See [LICENSE](LICENSE) for more details.
+
+---
+
+<p align="center">Built with ❤️ for Flutter developers.</p>
