@@ -29,6 +29,18 @@ class ProjectRequirements {
     };
   }
 
+  factory ProjectRequirements.fromJson(Map<String, dynamic> json) {
+    return ProjectRequirements(
+      stateManagement: json['stateManagement'] as String,
+      routing: json['routing'] as String,
+      projectScale: json['projectScale'] as String,
+      screenCount: json['screenCount'] as String,
+      authenticationRequired: json['authenticationRequired'] as bool,
+      sessionRequired: json['sessionRequired'] as bool,
+      environmentSetup: json['environmentSetup'] as String,
+    );
+  }
+
   @override
   String toString() {
     return '''
