@@ -3,6 +3,25 @@
 All notable changes to the Flutter Forge project will be documented in this file.
 
 ---
+## v1.0.1
+
+### Fixed
+
+* Automatic dependency installation during `forge init`.
+* Generated Flutter projects now install `dio` automatically.
+* Fixed consumer onboarding flow discovered during external acceptance testing.
+
+### Verified
+
+* External repository cloning.
+* Project initialization.
+* Architecture injection.
+* Foundation template generation.
+* Feature generation.
+* Duplicate protection.
+* `flutter analyze`.
+* `dart analyze`.
+
 
 ## v1.0.0
 
