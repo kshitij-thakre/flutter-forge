@@ -5,6 +5,39 @@ All notable changes to Flutter Forge will be documented in this file.
 The format is inspired by Keep a Changelog and follows semantic versioning principles.
 
 ---
+## 2.0.0 - 2026-06-22
+
+### 🚀 Ironship V2 Release
+
+### Added
+
+* Interactive Discovery Engine
+* Architecture Recommendation Engine
+* Technology Compatibility Engine
+* Recommendation Rules Registry
+* Developer Override Engine
+* Final Project Blueprint Engine
+* State Management Generator
+* Router Generator
+* Session Generator
+* Environment Generator
+* End-to-End `forge init` integration
+* Aggregated package installation
+* CLI help improvements
+* Release assets and examples
+
+### Improved
+
+* Developer experience for project initialization
+* Architecture selection workflow
+* Project generation pipeline
+
+### Notes
+
+This is the official V2 release of Ironship.
+
+V2 transforms Ironship from a Flutter project generator into an intelligent Flutter architecture assistant.
+
 ## v1.0.2 - 2026-06-21
 
 ### Improved
