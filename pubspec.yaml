@@ -5,6 +5,11 @@ homepage: https://github.com/kshitij-thakre/flutter-forge
 repository: https://github.com/kshitij-thakre/flutter-forge
 issue_tracker: https://github.com/kshitij-thakre/flutter-forge/issues
 documentation: https://github.com/kshitij-thakre/flutter-forge/tree/main/doc
+topics:
+  - cli
+  - scaffolding
+  - flutter
+  - clean-architecture
 
 environment:
   sdk: '>=3.0.0 <4.0.0'

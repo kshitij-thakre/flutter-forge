@@ -83,14 +83,20 @@ To configure the PATH environment variable on Windows:
 ## Quick Start
 
 ```bash
+# View help options
+forge --help
+
+# Initialize project
 forge init hospital_app
 
 cd hospital_app
 
+# Add feature modules
 forge add feature auth
 
 forge add feature dashboard
 
+# Validate setup
 flutter analyze
 ```
 
@@ -137,6 +143,47 @@ Brief breakdown:
 *   `lib/app/`: Handles application-level routing tables and configuration files.
 *   `lib/core/`: Houses reusable cross-cutting infrastructure logic shared across different features.
 *   `lib/features/`: Contains business feature modules divided into domain, data, and presentation folders.
+
+---
+
+## Architecture Pipeline
+
+When you run `forge init <project_name>`, Ironship executes a structured architecture staging pipeline to prepare your codebase:
+
+```mermaid
+graph TD
+    A[Interactive Discovery Engine] --> B[Architecture Recommendation Engine]
+    B --> C[Developer Override & Customization]
+    C --> D[Compatibility Matrix Validation]
+    D --> E[Clean Architecture Folder Scaffolding]
+    E --> F[Foundation Templates Injection]
+    F --> G[Automatic Dependency Resolution & Installation]
+```
+
+1. **Interactive Discovery**: Collects functional requirement metrics (app scale, screen count, auth requirements, session persistence, environments).
+2. **Architecture Recommendation**: Evaluates inputs against the Compatibility Matrix to recommend the optimal tech stack (Riverpod/Bloc, Go Router, secure session strategies, multi-environment setups).
+3. **Developer Override**: Displays recommendations and allows you to customize state management, routing, session storage, and environments.
+4. **Compatibility Validation**: Verifies dependencies and selections to block invalid or conflicting configurations.
+5. **Folder & Template Scaffolding**: Scaffolds decoupled directories and writes production-ready base files (`dio_client.dart`, `app_exception.dart`, `api_result.dart`).
+6. **Dependency Installation**: Injects and resolves the necessary packages automatically through the Flutter SDK.
+
+---
+
+## Developer Experience (DX)
+
+Ironship is designed to make Day 0 Flutter setup extremely simple and robust:
+* **Zero Runtime Dependencies**: The scaffolded code is 100% standard Dart/Flutter. Once generated, the project has zero runtime coupling or dependencies on the Ironship CLI.
+* **Instant Feature Scaffolding**: Avoid repetitive folder creation. Create complete data/domain/presentation Clean Architecture feature packages in a single command.
+* **Duplicate Protection**: Safety mechanisms prevent accidental overwriting of existing projects, modules, or templates.
+* **Compile-Ready Out of the Box**: Automatically resolves and installs corresponding dependencies to ensure the initialized template immediately builds.
+
+---
+
+## Repository Links
+
+* **GitHub Repository**: [kshitij-thakre/flutter-forge](https://github.com/kshitij-thakre/flutter-forge)
+* **Issue Tracker**: [kshitij-thakre/flutter-forge/issues](https://github.com/kshitij-thakre/flutter-forge/issues)
+* **Documentation**: [kshitij-thakre/flutter-forge/tree/main/doc](https://github.com/kshitij-thakre/flutter-forge/tree/main/doc)
 
 ---
 
