@@ -1,5 +1,3 @@
-import 'dart:io';
-
 void main() {
   print('==================================================');
   print('            Ironship CLI Simulated Walkthrough    ');
