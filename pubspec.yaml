@@ -1,6 +1,6 @@
 name: ironship
 description: A developer-first Flutter scaffolding CLI that simplifies Day 0 setup, generates production-ready architecture, foundation templates, and feature modules.
-version: 1.0.2
+version: 2.0.0
 homepage: https://github.com/kshitij-thakre/flutter-forge
 repository: https://github.com/kshitij-thakre/flutter-forge
 issue_tracker: https://github.com/kshitij-thakre/flutter-forge/issues
