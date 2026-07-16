@@ -1,0 +1,374 @@
+version: 3.0
+
+milestones:
+  - title: V3.0 Core Platform
+    description: Core CLI and configuration engine
+  - title: V3.0 Scaffolding Engine
+    description: Feature & module generation
+  - title: V3.0 Architecture Assistant
+    description: Doctor, Score and Blueprint
+  - title: V3.0 Release Engineering
+    description: CI/CD Automation
+
+labels:
+  - name: enhancement
+    color: a2eeef
+    description: New feature or request
+  - name: architecture
+    color: d4c5f9
+    description: Architecture decisions or patterns
+  - name: cli
+    color: 0052cc
+    description: Command Line Interface
+  - name: documentation
+    color: 0075ca
+    description: Improvements or additions to documentation
+  - name: release
+    color: 6f42c1
+    description: Release management and automation
+  - name: testing
+    color: c5def5
+    description: Adding or improving tests
+  - name: automation
+    color: bfd4f2
+    description: Automation tasks
+
+issues:
+  - title: CLI Foundation
+    milestone: V3.0 Core Platform
+    labels:
+      - cli
+      - enhancement
+    estimate: Large
+    priority: High
+    objective: Replace basic positional argument checks with a robust command and option parser package:args.
+    background: The current CLI checks arguments directly via positional indexes, which limits flexibility and causes errors when flags are used.
+    scope: Integrate package:args to support subcommands, options, and flags. Add support for version and help flags.
+    deliverables:
+      - Integrate package:args in bin/forge.dart
+      - Setup help and version commands
+      - Implement clean validation of parameters
+    acceptanceCriteria:
+      - Command "forge init --help" prints help screen
+      - CLI flags like --state can be parsed safely
+      - Exits with 0 on success and non-zero code on failure
+    outOfScope: Changing target generated code styles or templates.
+    dependencies: None
+    testingChecklist:
+      - Unit test bin/forge.dart command parsing
+      - Validate exit code propagation on invalid parameters
+    definitionOfDone: Code builds cleanly and passes lints and unit tests.
+
+  - title: ironship.yaml Configuration Engine
+    milestone: V3.0 Core Platform
+    labels:
+      - architecture
+      - enhancement
+    estimate: Medium
+    priority: High
+    objective: Add support for reading and writing project settings via a central ironship.yaml configuration file.
+    background: Currently, configuration is saved in a write-only JSON file which is never read back, deviating from specs requiring YAML configs.
+    scope: Implement a YAML parser and generator for project configuration. Read configuration file during feature scaffolding.
+    deliverables:
+      - Implement configuration loading and generation functions
+      - Save settings as ironship.yaml instead of forge_config.json
+      - Read config settings inside FeatureGenerator
+    acceptanceCriteria:
+      - Running forge init creates ironship.yaml at the root of the project
+      - YAML contains correct properties (routing, state management)
+      - Feature generator checks ironship.yaml for preferred settings
+    outOfScope: Editing global user configuration files outside the project root.
+    dependencies: CLI Foundation
+    testingChecklist:
+      - Unit test YAML parser and serializer
+      - Verify configuration values are loaded correctly in generators
+    definitionOfDone: Code builds cleanly and passes lints and unit tests.
+
+  - title: Smart Feature Generator
+    milestone: V3.0 Scaffolding Engine
+    labels:
+      - cli
+      - enhancement
+    estimate: Large
+    priority: High
+    objective: Enhance the feature generator to write core screens, repositories, and state models instead of empty folders.
+    background: The current FeatureGenerator only structures directories, leaving them completely empty, which offers limited scaffolding value.
+    scope: Add templates for screens, domain repositories, repository implementations, and state notifier/bloc classes.
+    deliverables:
+      - Write skeleton code files during forge add feature
+      - Inject dependency locator mappings into core injection
+      - Support --no-data and --no-routes flags
+    acceptanceCriteria:
+      - Scaffolding a feature writes functional Dart code classes
+      - All generated code compiles without analyzer warnings
+      - State controller files match the project's state management selection
+    outOfScope: Integrating custom network APIs inside the generated repositories.
+    dependencies: ironship.yaml Configuration Engine
+    testingChecklist:
+      - Verify generated feature files exist and compile
+      - Assert correct files are generated for both Riverpod and Bloc
+    definitionOfDone: Code builds cleanly and passes lints and unit tests.
+
+  - title: Module Generator
+    milestone: V3.0 Scaffolding Engine
+    labels:
+      - cli
+      - enhancement
+    estimate: Medium
+    priority: Medium
+    objective: Implement support for generating standalone modules or micro-packages within the workspace.
+    background: Scaling large projects requires isolating features into distinct packages rather than a single monolithic app.
+    scope: Scaffold new local Dart/Flutter packages and link them via melos or pubspec path dependencies.
+    deliverables:
+      - Implement forge add module command
+      - Scaffold modular package structures
+      - Link module dependencies in pubspec.yaml
+    acceptanceCriteria:
+      - Scaffolds a new package under modules/ directory
+      - Setup packages with clean separate pubspec configurations
+    outOfScope: Setup of monorepo build tools other than standard path bindings or melos.
+    dependencies: CLI Foundation
+    testingChecklist:
+      - Validate generated package structure
+      - Verify package dependency linking compiles
+    definitionOfDone: Code builds cleanly and passes lints and unit tests.
+
+  - title: Project Doctor
+    milestone: V3.0 Architecture Assistant
+    labels:
+      - cli
+      - architecture
+    estimate: Medium
+    priority: Medium
+    objective: Create a diagnostic command to inspect project health and configurations.
+    background: Developers need an easy way to verify if their workspace conforms to Ironship standards and identify issues.
+    scope: Build forge doctor command to diagnose Flutter SDK versions, config file presence, and directory integrity.
+    deliverables:
+      - Implement forge doctor command structure
+      - Add diagnostics for Flutter and Dart environment settings
+      - Verify integrity of core files
+    acceptanceCriteria:
+      - Command runs successfully and prints a diagnostic summary
+      - Returns non-zero exit code if critical configuration files are missing
+    outOfScope: Automatically editing native platform configurations.
+    dependencies: CLI Foundation
+    testingChecklist:
+      - Test doctor outputs with missing configuration files
+      - Mock Flutter SDK detection logic
+    definitionOfDone: Code builds cleanly and passes lints and unit tests.
+
+  - title: Architecture Score
+    milestone: V3.0 Architecture Assistant
+    labels:
+      - architecture
+    estimate: Large
+    priority: Low
+    objective: Add an engine to evaluate architectural compliance and generate a score report.
+    background: To ensure Clean Architecture, the tool should statically analyze imports to make sure layers do not cross boundaries.
+    scope: Build a static analysis scanner checking imports across data, domain, and presentation layers.
+    deliverables:
+      - Build import analysis scanner
+      - Construct scoring algorithm
+      - Export compliance reports
+    acceptanceCriteria:
+      - Flags an issue if Domain layer imports standard UI widgets or Data sources
+      - Computes a score based on violation counts
+    outOfScope: General code complexity or performance optimizations checks.
+    dependencies: CLI Foundation
+    testingChecklist:
+      - Verify import violation detection rules
+      - Check compliance score calculation logic
+    definitionOfDone: Code builds cleanly and passes lints and unit tests.
+
+  - title: Dependency Advisor
+    milestone: V3.0 Architecture Assistant
+    labels:
+      - enhancement
+    estimate: Medium
+    priority: Low
+    objective: Implement a dependency checker to recommend updates and spot deprecations.
+    background: Outdated dependencies can cause security issues and compilation failures during version bumps.
+    scope: Analyze dependencies inside pubspec.yaml and recommend updates.
+    deliverables:
+      - Parse pubspec dependency declarations
+      - Compare versions with pub.dev APIs
+      - Print version recommendations
+    acceptanceCriteria:
+      - Recommends stable updates for dio, go_router, etc.
+      - Displays deprecation notices for old packages
+    outOfScope: Performing automated major-version updates that cause API breaks.
+    dependencies: CLI Foundation
+    testingChecklist:
+      - Mock pub.dev API response
+      - Test version comparison functions
+    definitionOfDone: Code builds cleanly and passes lints and unit tests.
+
+  - title: Blueprint Generator
+    milestone: V3.0 Architecture Assistant
+    labels:
+      - enhancement
+    estimate: Medium
+    priority: Medium
+    objective: Export the resolved project blueprint structure as a standalone configuration schema.
+    background: The blueprint is currently displayed in memory only, without exporting it for team collaboration.
+    scope: Support exporting the blueprint schema during project init.
+    deliverables:
+      - Export blueprint configuration to blueprint.json/yaml
+      - Allow blueprint input to recreate identical workspace settings
+    acceptanceCriteria:
+      - Running forge init exports the blueprint structure
+      - The exported file matches user overrides
+    outOfScope: Generating graphical architectural diagrams.
+    dependencies: ironship.yaml Configuration Engine
+    testingChecklist:
+      - Verify blueprint serialization and export file formats
+    definitionOfDone: Code builds cleanly and passes lints and unit tests.
+
+  - title: Documentation Generator
+    milestone: V3.0 Architecture Assistant
+    labels:
+      - documentation
+    estimate: Medium
+    priority: Low
+    objective: Autogenerate architectural documentation based on feature structures.
+    background: Developers need clear, up-to-date documentation on routing tables, features, and config layers.
+    scope: Statically parse features and configurations to write structural documents.
+    deliverables:
+      - Create documentation generator engine
+      - Generate markdown diagrams of routes and features
+    acceptanceCriteria:
+      - Generates an updated ARCHITECTURE.md for the target project
+      - Lists all registered features and routes
+    outOfScope: Writing custom business logic explanations.
+    dependencies: ironship.yaml Configuration Engine
+    testingChecklist:
+      - Verify doc outputs with different features list
+    definitionOfDone: Code builds cleanly and passes lints and unit tests.
+
+  - title: GitHub Actions CI
+    milestone: V3.0 Release Engineering
+    labels:
+      - release
+      - automation
+    estimate: Medium
+    priority: High
+    objective: Create a standard GitHub Actions CI pipeline template for scaffolded applications.
+    background: Scaffolding templates should include automated check-in tasks to verify linting and tests instantly.
+    scope: Add workflow files templates under .github/workflows for new projects.
+    deliverables:
+      - Create actions template files
+      - Ingest workflows during project init
+    acceptanceCriteria:
+      - Running forge init creates .github/workflows/ci.yml
+      - Workflow performs analyze, format, and test runs
+    outOfScope: Configuration of deployment platforms or cloud servers.
+    dependencies: ironship.yaml Configuration Engine
+    testingChecklist:
+      - Verify workflow files generation
+    definitionOfDone: Code builds cleanly and passes lints and unit tests.
+
+  - title: Automated pub.dev Publishing
+    milestone: V3.0 Release Engineering
+    labels:
+      - release
+      - automation
+    estimate: Medium
+    priority: High
+    objective: Configure GitHub Actions workflow to automate publishing to pub.dev on tag push.
+    background: Publishing packages manually is error-prone and requires distributing access keys.
+    scope: Establish a GitHub workflow utilizing OIDC token authentication to deploy the package to pub.dev.
+    deliverables:
+      - Create pub.dev release workflow configuration
+      - Define publishing validation steps
+    acceptanceCriteria:
+      - Tag pushes trigger dry-runs and automated publishing
+      - Publishes successfully without local credentials exposure
+    outOfScope: Handling pub.dev organization billing.
+    dependencies: GitHub Actions CI
+    testingChecklist:
+      - Test publication scripts mock runs
+    definitionOfDone: Code builds cleanly and passes lints and unit tests.
+
+  - title: GitHub Release Automation
+    milestone: V3.0 Release Engineering
+    labels:
+      - release
+      - automation
+    estimate: Low
+    priority: Medium
+    objective: Automate the generation of GitHub releases and release notes based on changelogs.
+    background: Keeping GitHub releases synchronized with tags requires manual copying.
+    scope: Write a release automation workflow triggered by tag updates.
+    deliverables:
+      - Create GitHub release action configurations
+      - Parse CHANGELOG.md automatically for release notes
+    acceptanceCriteria:
+      - Tag pushes create corresponding GitHub releases with notes
+    outOfScope: Automatically updating version definitions inside pubspec.yaml.
+    dependencies: GitHub Actions CI
+    testingChecklist:
+      - Test changelog parser logic with mocked entries
+    definitionOfDone: Code builds cleanly and passes lints and unit tests.
+
+  - title: Release Validation
+    milestone: V3.0 Release Engineering
+    labels:
+      - testing
+    estimate: Medium
+    priority: High
+    objective: Establish a robust testing stage to validate all configurations before package release.
+    background: The release verification checklist is manual, risking regressions in core templates.
+    scope: Write an automated validation suite verifying scaffolding compiles cleanly.
+    deliverables:
+      - Implement automated build validation suite
+      - Check analysis and lints on all generated projects
+    acceptanceCriteria:
+      - Validator runs all generators and checks outputs
+      - Exit code returns failure if any generated project has compiler errors
+    outOfScope: Setting up device testing farms or executing visual regression tests.
+    dependencies: Test Suite Refactor
+    testingChecklist:
+      - Test validation suite with invalid template structures
+    definitionOfDone: Code builds cleanly and passes lints and unit tests.
+
+  - title: Test Suite Refactor
+    milestone: V3.0 Release Engineering
+    labels:
+      - testing
+    estimate: Medium
+    priority: High
+    objective: Refactor the test suite to use standard unit assertions and mock interactive CLI inputs.
+    background: Manual tests block on standard stdin checks, preventing CI testing workflows from running cleanly.
+    scope: Rewrite tests using package:test structures. Mock/override stdin calls.
+    deliverables:
+      - Refactor manual scripts to unit/integration tests
+      - Mock process commands and input prompts
+    acceptanceCriteria:
+      - Running dart test executes all tests in under 30 seconds
+      - No test blocks on stdin input prompts
+    outOfScope: Modifying test structure of third-party templates.
+    dependencies: None
+    testingChecklist:
+      - Verify all tests pass cleanly in standard CI environment
+    definitionOfDone: Code builds cleanly and passes lints and unit tests.
+
+  - title: Codebase Cleanup
+    milestone: V3.0 Release Engineering
+    labels:
+      - testing
+    estimate: Low
+    priority: Medium
+    objective: Remove dead code, refactor inline templates, and update licenses.
+    background: Several classes (Logger, RecommendationRegistryService) are unused, and copyright references are outdated.
+    scope: Clean unused utilities. Update LICENSE copyright name to Ironship.
+    deliverables:
+      - Delete unused classes and files
+      - Update copyright claims in LICENSE
+    acceptanceCriteria:
+      - Analyzer returns zero warnings or unused symbols
+      - License refers to Ironship copyright
+    outOfScope: Redesigning core service boundaries.
+    dependencies: None
+    testingChecklist:
+      - Assert analyzer passes cleanly
+    definitionOfDone: Code builds cleanly and passes lints and unit tests.
