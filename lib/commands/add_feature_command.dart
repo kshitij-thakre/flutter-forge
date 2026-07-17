@@ -3,7 +3,8 @@ import 'package:ironship/generators/feature_generator.dart';
 
 class AddFeatureCommand {
   final String name = 'add';
-  final String description = 'Scaffold a new Clean Architecture feature module.';
+  final String description =
+      'Scaffold a new Clean Architecture feature module.';
 
   static Future<void> execute(String projectPath, String featureName) async {
     final baseDir = projectPath.endsWith('/')

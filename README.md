@@ -100,6 +100,85 @@ forge add feature dashboard
 flutter analyze
 ```
 
+## CLI Command Reference
+
+Ironship provides a commands-driven interface for Flutter project engineering:
+
+```bash
+# Global Usage
+forge <command> [options]
+```
+
+### Supported Commands
+
+| Command | Description | Status |
+|---|---|---|
+| `init` | Initialize a new Flutter Clean Architecture project. | ✅ Implemented |
+| `help` | Display usage instructions and options. | ✅ Implemented |
+| `version` | Display the dynamic package version. | ✅ Implemented |
+| `doctor` | Diagnose environment issues. | ⏳ Placeholder |
+| `feature` | Scaffold new Clean Architecture features. | ⏳ Placeholder |
+| `module` | Scaffold modular library packages. | ⏳ Placeholder |
+| `blueprint` | Export or inspect blueprints configurations. | ⏳ Placeholder |
+| `docs` | Compile architecture documentation. | ⏳ Placeholder |
+| `score` | Scan and evaluate code quality scores. | ⏳ Placeholder |
+
+### Options
+
+* `-h, --help`: Show help directions.
+* `--version`: Show current version information.
+
+### Examples
+
+```bash
+# Initialize a new Flutter application
+forge init my_app
+
+# View version info
+forge version
+# or
+forge --version
+
+# View usage guide
+forge help
+# or
+forge --help
+```
+
+---
+
+## Developer Guide: Extending Commands
+
+The CLI structure follows a registry-dispatch pattern. To add a new command:
+
+1. **Create Command Implementation**:
+   Create a class implementing the `Command` interface (defined in `lib/commands/command.dart`):
+   ```dart
+   import 'package:ironship/commands/command.dart';
+
+   class MyNewCommand implements Command {
+     @override
+     String get name => 'my_command';
+
+     @override
+     String get description => 'A brief description of my command.';
+
+     @override
+     Future<int> execute(List<String> args) async {
+       // Implement business logic
+       print('Executing my new command...');
+       return 0; // Return 0 on success, non-zero on failure
+     }
+   }
+   ```
+2. **Register Command**:
+   Open `bin/forge.dart`, import your command, and register it inside the registry setup:
+   ```dart
+   registry.register(MyNewCommand());
+   ```
+
+No changes to the main dispatcher or other command files are required.
+
 ---
 
 ## Generated Architecture
@@ -221,7 +300,7 @@ Upcoming features and improvements planned for future releases:
 
 ## Contributing
 
-Contributions are welcome! Please review [CONTRIBUTING.md](CONTRIBUTING.md) to learn how to open issues, implement features, or submit pull requests.
+Contributions are welcome! Please review the [CONTRIBUTING.md](CONTRIBUTING.md) guide for general rules and standard [Git Workflow Guidelines](CONTRIBUTING.md#git-workflow-lifecycle) to learn how to create branches, format commits, submit pull requests, and link issue closings.
 
 ---
 

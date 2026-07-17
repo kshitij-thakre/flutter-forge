@@ -28,14 +28,16 @@ class RecommendationRegistryService {
       trigger: 'Authentication Enabled',
       recommendation: 'Persistent Session Strategy',
       alternative: 'No session storage required',
-      description: 'Recommended session strategy when authentication is enabled.',
+      description:
+          'Recommended session strategy when authentication is enabled.',
     ),
     const RecommendationRule(
       category: 'Environment Setup',
       trigger: 'Environment Setup Enabled',
       recommendation: 'Environment Configuration Strategy',
       alternative: 'Single environment setup',
-      description: 'Recommended environment strategy when multiple environment setups are required.',
+      description:
+          'Recommended environment strategy when multiple environment setups are required.',
     ),
   ];
 
@@ -44,7 +46,9 @@ class RecommendationRegistryService {
   }
 
   List<RecommendationRule> getRulesByCategory(String category) {
-    return _rules.where((r) => r.category.toLowerCase() == category.toLowerCase()).toList();
+    return _rules
+        .where((r) => r.category.toLowerCase() == category.toLowerCase())
+        .toList();
   }
 
   RecommendationRule? getRule(String trigger) {

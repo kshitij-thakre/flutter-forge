@@ -59,7 +59,8 @@ class SecureStorageService {
 }
 ''');
       metadata['generatedDirectories'].add('lib/core/session');
-      metadata['generatedFiles'].add('lib/core/session/secure_storage_service.dart');
+      metadata['generatedFiles']
+          .add('lib/core/session/secure_storage_service.dart');
       metadata['packagesToAdd'].add('flutter_secure_storage');
     } else if (normalized == 'shared preferences') {
       if (!await sessionDir.exists()) {
@@ -73,7 +74,8 @@ class PreferencesService {
 }
 ''');
       metadata['generatedDirectories'].add('lib/core/session');
-      metadata['generatedFiles'].add('lib/core/session/preferences_service.dart');
+      metadata['generatedFiles']
+          .add('lib/core/session/preferences_service.dart');
       metadata['packagesToAdd'].add('shared_preferences');
     } else if (normalized == 'memory session') {
       if (!await sessionDir.exists()) {
@@ -87,7 +89,8 @@ class MemorySessionStore {
 }
 ''');
       metadata['generatedDirectories'].add('lib/core/session');
-      metadata['generatedFiles'].add('lib/core/session/memory_session_store.dart');
+      metadata['generatedFiles']
+          .add('lib/core/session/memory_session_store.dart');
     }
 
     return metadata;

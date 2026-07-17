@@ -19,10 +19,12 @@ class DeveloperSelectionService {
     String? environmentStrategy,
   }) {
     return DeveloperSelection(
-      stateManagement: stateManagement ?? recommendation.recommendedStateManagement,
+      stateManagement:
+          stateManagement ?? recommendation.recommendedStateManagement,
       routing: routing ?? recommendation.recommendedRouting,
       sessionStrategy: sessionStrategy ?? recommendation.sessionStrategy,
-      environmentStrategy: environmentStrategy ?? recommendation.environmentStrategy,
+      environmentStrategy:
+          environmentStrategy ?? recommendation.environmentStrategy,
     );
   }
 }

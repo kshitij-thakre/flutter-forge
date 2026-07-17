@@ -132,7 +132,8 @@ void main() {
   // Test 6: Verify different inputs generate different recommendations
   print('6. Testing recommendation divergence...');
   if (smallRec.recommendedRouting == mediumRec.recommendedRouting &&
-      smallConfig.requirements.projectScale != mediumConfig.requirements.projectScale) {
+      smallConfig.requirements.projectScale !=
+          mediumConfig.requirements.projectScale) {
     print('FAILED: Recommendations did not diverge.');
     exit(1);
   }

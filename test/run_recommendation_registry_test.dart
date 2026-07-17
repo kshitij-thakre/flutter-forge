@@ -36,7 +36,8 @@ void main() {
   final scaleRules = service.getRulesByCategory('Project Scale');
   print('Category "Project Scale" contains ${scaleRules.length} rules.');
   if (scaleRules.length != 3) {
-    print('FAILED: Scale rules count mismatch (expected 3, got ${scaleRules.length}).');
+    print(
+        'FAILED: Scale rules count mismatch (expected 3, got ${scaleRules.length}).');
     exit(1);
   }
   print('PASSED: Category filtering working.\n');

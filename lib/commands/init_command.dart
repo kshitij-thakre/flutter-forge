@@ -11,10 +11,14 @@ import 'package:ironship/generators/router_generator.dart';
 import 'package:ironship/generators/session_generator.dart';
 import 'package:ironship/generators/environment_generator.dart';
 import 'package:ironship/models/final_project_blueprint.dart';
+import 'command.dart';
 
-class InitCommand {
+class InitCommand implements Command {
+  @override
   final String name = 'init';
-  final String description = 'Initialize a new Flutter project pre-configured with the Forge architecture.';
+  @override
+  final String description =
+      'Initialize a new Flutter project pre-configured with the Forge architecture.';
 
   static String _friendlyLabel(String original) {
     final trimmed = original.trim();
@@ -31,36 +35,53 @@ class InitCommand {
     return trimmed;
   }
 
-  static Future<void> execute(String projectName) async {
+  @override
+  Future<int> execute(List<String> args) async {
+    if (args.isEmpty) {
+      print('Error: Missing project name.');
+      print('Usage: forge init <project_name>');
+      return 1;
+    }
+    final projectName = args.first;
+
     final nameRegex = RegExp(r'^[a-z][a-z0-9_]*$');
     if (!nameRegex.hasMatch(projectName)) {
       print('Invalid project name.');
-      print('Project names must contain lowercase letters, numbers and underscores only.');
-      return;
+      print(
+          'Project names must contain lowercase letters, numbers and underscores only.');
+      return 1;
     }
 
     final directory = Directory(projectName);
     if (await directory.exists()) {
       print('Project already exists.');
       print('Choose another name or delete the existing directory.');
-      return;
+      return 1;
     }
 
     final flutterService = FlutterService();
     final isInstalled = await flutterService.isFlutterInstalled();
     if (!isInstalled) {
-      print('Flutter SDK not found. Please install Flutter and add it to PATH.');
-      return;
+      print(
+          'Flutter SDK not found. Please install Flutter and add it to PATH.');
+      return 1;
     }
 
     try {
       final version = await flutterService.getFlutterVersion();
       print('Flutter detected: $version');
     } catch (e) {
-      print('Flutter SDK not found. Please install Flutter and add it to PATH.');
-      return;
+      print(
+          'Flutter SDK not found. Please install Flutter and add it to PATH.');
+      return 1;
     }
 
+    await _runInit(projectName, flutterService);
+    return 0;
+  }
+
+  Future<void> _runInit(
+      String projectName, FlutterService flutterService) async {
     // 1. Questionnaire & Discovery
     final discoveryPipeline = DiscoveryPipelineService();
     final projectConfig = await discoveryPipeline.execute(projectName);
@@ -85,37 +106,45 @@ class InitCommand {
     print('\n==================================================');
     print('          Recommended Architecture Configuration');
     print('==================================================');
-    print('State Management:     ${overrideStateManagement ?? recommendation.recommendedStateManagement}');
-    print('Routing Solution:     ${overrideRouting ?? recommendation.recommendedRouting}');
-    print('Session Strategy:     ${_friendlyLabel(recommendation.sessionStrategy)}');
-    print('Environment Strategy: ${_friendlyLabel(recommendation.environmentStrategy)}');
+    print(
+        'State Management:     ${overrideStateManagement ?? recommendation.recommendedStateManagement}');
+    print(
+        'Routing Solution:     ${overrideRouting ?? recommendation.recommendedRouting}');
+    print(
+        'Session Strategy:     ${_friendlyLabel(recommendation.sessionStrategy)}');
+    print(
+        'Environment Strategy: ${_friendlyLabel(recommendation.environmentStrategy)}');
     print('==================================================\n');
 
     // 4. Developer Override Prompt
     stdout.write('Do you want to override these selections? (y/N): ');
     final overrideChoice = stdin.readLineSync()?.trim().toLowerCase();
     if (overrideChoice == 'y' || overrideChoice == 'yes') {
-      print('\nEnter override options (leave blank to accept recommendation/current choice):');
-      
+      print(
+          '\nEnter override options (leave blank to accept recommendation/current choice):');
+
       stdout.write('State Management (Riverpod, Bloc, Provider, GetX): ');
       final stateInput = stdin.readLineSync()?.trim();
       if (stateInput != null && stateInput.isNotEmpty) {
         overrideStateManagement = stateInput;
       }
 
-      stdout.write('Routing Solution (Go Router, Navigation 2.0, Auto Route, Beamer): ');
+      stdout.write(
+          'Routing Solution (Go Router, Navigation 2.0, Auto Route, Beamer): ');
       final routingInput = stdin.readLineSync()?.trim();
       if (routingInput != null && routingInput.isNotEmpty) {
         overrideRouting = routingInput;
       }
 
-      stdout.write('Session Strategy (Persistent Session, Secure Storage, Shared Preferences, Memory Session): ');
+      stdout.write(
+          'Session Strategy (Persistent Session, Secure Storage, Shared Preferences, Memory Session): ');
       final sessionInput = stdin.readLineSync()?.trim();
       if (sessionInput != null && sessionInput.isNotEmpty) {
         overrideSessionStrategy = sessionInput;
       }
 
-      stdout.write('Environment Strategy (Development only, Single environment setup, Dev + Production, Dev + Stage + Production, Environment Configuration Setup, Environment Configuration Strategy, Custom environment): ');
+      stdout.write(
+          'Environment Strategy (Development only, Single environment setup, Dev + Production, Dev + Stage + Production, Environment Configuration Setup, Environment Configuration Strategy, Custom environment): ');
       final envInput = stdin.readLineSync()?.trim();
       if (envInput != null && envInput.isNotEmpty) {
         overrideEnvironmentStrategy = envInput;
@@ -146,7 +175,8 @@ class InitCommand {
     print('State Management:     ${blueprint.stateManagement}');
     print('Routing Solution:     ${blueprint.routing}');
     print('Session Strategy:     ${_friendlyLabel(blueprint.sessionStrategy)}');
-    print('Environment Strategy: ${_friendlyLabel(blueprint.environmentStrategy)}');
+    print(
+        'Environment Strategy: ${_friendlyLabel(blueprint.environmentStrategy)}');
     print('====================================');
 
     // 6. Flutter Project Creation
@@ -172,7 +202,8 @@ class InitCommand {
 
     // 9. Specific Generators execution
     print('Generating architecture modules...');
-    final stateMeta = await StateManagementGenerator().generate(projectName, blueprint);
+    final stateMeta =
+        await StateManagementGenerator().generate(projectName, blueprint);
     final routerMeta = await RouterGenerator().generate(projectName, blueprint);
 
     Map<String, dynamic>? sessionMeta;
@@ -207,9 +238,4 @@ class InitCommand {
     print('Dependencies installed.');
     print('\nProject initialization complete!');
   }
-
-  Future<void> run(List<String> arguments) async {
-    // TODO: Parse options like project name, custom state management or routing package.
-  }
 }
-

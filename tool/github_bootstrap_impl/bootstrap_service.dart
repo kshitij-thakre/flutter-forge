@@ -74,7 +74,8 @@ class BootstrapService {
 
     logger.success('Validation passed cleanly.');
 
-    logger.info('Fetching existing milestones, labels, and issues from GitHub...');
+    logger.info(
+        'Fetching existing milestones, labels, and issues from GitHub...');
     List<Map<String, dynamic>> existingMilestones = [];
     List<Map<String, dynamic>> existingLabels = [];
     List<Map<String, dynamic>> existingIssues = [];
@@ -90,7 +91,8 @@ class BootstrapService {
 
     // 1. Calculate Operations
     final milestonesCreate = <MilestoneConfig>[];
-    final milestonesUpdate = <MapEntry<MilestoneConfig, Map<String, dynamic>>>[];
+    final milestonesUpdate =
+        <MapEntry<MilestoneConfig, Map<String, dynamic>>>[];
     final milestonesSkip = <MilestoneConfig>[];
 
     final labelsCreate = <LabelConfig>[];
@@ -101,12 +103,14 @@ class BootstrapService {
     final issuesUpdate = <MapEntry<IssueConfig, Map<String, dynamic>>>[];
     final issuesSkip = <IssueConfig>[];
 
-    final milestoneMap = <String, int>{}; // title to number (existing or created)
+    final milestoneMap =
+        <String, int>{}; // title to number (existing or created)
 
     // Analyze Milestones
     for (final configM in config.milestones) {
       final match = existingMilestones.firstWhere(
-        (m) => m['title'].toString().toLowerCase() == configM.title.toLowerCase(),
+        (m) =>
+            m['title'].toString().toLowerCase() == configM.title.toLowerCase(),
         orElse: () => const {},
       );
 
@@ -138,7 +142,8 @@ class BootstrapService {
 
     // Analyze Labels
     for (final configL in config.labels) {
-      final normalizedConfigColor = configL.color.replaceAll('#', '').toLowerCase();
+      final normalizedConfigColor =
+          configL.color.replaceAll('#', '').toLowerCase();
       final match = existingLabels.firstWhere(
         (l) => l['name'].toString().toLowerCase() == configL.name.toLowerCase(),
         orElse: () => const {},
@@ -150,7 +155,8 @@ class BootstrapService {
         final currentColor = (match['color'] as String? ?? '').toLowerCase();
         final currentDesc = (match['description'] as String? ?? '');
 
-        if (currentColor != normalizedConfigColor || currentDesc != configL.description) {
+        if (currentColor != normalizedConfigColor ||
+            currentDesc != configL.description) {
           labelsUpdate.add(MapEntry(configL, match));
         } else {
           labelsSkip.add(configL);
@@ -161,7 +167,8 @@ class BootstrapService {
     // Analyze Issues
     for (final configI in config.issues) {
       final match = existingIssues.firstWhere(
-        (i) => i['title'].toString().toLowerCase() == configI.title.toLowerCase(),
+        (i) =>
+            i['title'].toString().toLowerCase() == configI.title.toLowerCase(),
         orElse: () => const {},
       );
 
@@ -170,20 +177,23 @@ class BootstrapService {
       } else {
         // Compare Body
         final currentBody = _normalizeString(match['body'] as String? ?? '');
-        final expectedBody = _normalizeString(yamlParser.formatIssueBody(configI));
+        final expectedBody =
+            _normalizeString(yamlParser.formatIssueBody(configI));
         bool bodyDiffers = currentBody != expectedBody;
 
         // Compare Milestone
         final milestoneObj = match['milestone'] as Map<String, dynamic>?;
         final currentMilestoneTitle = milestoneObj?['title'] as String? ?? '';
-        bool milestoneDiffers = currentMilestoneTitle.toLowerCase() != configI.milestone.toLowerCase();
+        bool milestoneDiffers = currentMilestoneTitle.toLowerCase() !=
+            configI.milestone.toLowerCase();
 
         // Compare Labels
         final currentLabels = (match['labels'] as List<dynamic>?)
                 ?.map((l) => l['name'].toString().toLowerCase())
                 .toSet() ??
             <String>{};
-        final expectedLabels = configI.labels.map((l) => l.toLowerCase()).toSet();
+        final expectedLabels =
+            configI.labels.map((l) => l.toLowerCase()).toSet();
         bool labelsDiffer = !_isSetEqual(currentLabels, expectedLabels);
 
         if (bodyDiffers || milestoneDiffers || labelsDiffer) {
@@ -244,7 +254,9 @@ class BootstrapService {
     logger.info('Applying Milestones changes...');
     for (final m in milestonesCreate) {
       try {
-        final res = await apiClient.createMilestone(owner, repo, m.title, m.description, dueOn: m.dueOn);
+        final res = await apiClient.createMilestone(
+            owner, repo, m.title, m.description,
+            dueOn: m.dueOn);
         milestoneMap[m.title] = res['number'] as int;
         logger.success('Created milestone: "${m.title}"');
         milestonesCreatedCount++;
@@ -258,7 +270,9 @@ class BootstrapService {
       final match = pair.value;
       final number = match['number'] as int;
       try {
-        await apiClient.updateMilestone(owner, repo, number, configM.title, configM.description, dueOn: configM.dueOn);
+        await apiClient.updateMilestone(
+            owner, repo, number, configM.title, configM.description,
+            dueOn: configM.dueOn);
         logger.success('Updated milestone: "${configM.title}"');
         milestonesUpdatedCount++;
       } catch (e) {
@@ -271,7 +285,8 @@ class BootstrapService {
     logger.info('Applying Labels changes...');
     for (final l in labelsCreate) {
       try {
-        await apiClient.createLabel(owner, repo, l.name, l.color, l.description);
+        await apiClient.createLabel(
+            owner, repo, l.name, l.color, l.description);
         logger.success('Created label: "${l.name}"');
         labelsCreatedCount++;
       } catch (e) {
@@ -283,7 +298,8 @@ class BootstrapService {
       final configL = pair.key;
       final match = pair.value;
       try {
-        await apiClient.updateLabel(owner, repo, match['name'] as String, configL.color, configL.description);
+        await apiClient.updateLabel(owner, repo, match['name'] as String,
+            configL.color, configL.description);
         logger.success('Updated label: "${configL.name}"');
         labelsUpdatedCount++;
       } catch (e) {
@@ -298,7 +314,8 @@ class BootstrapService {
       final number = milestoneMap[i.milestone];
       final body = yamlParser.formatIssueBody(i);
       try {
-        final res = await apiClient.createIssue(owner, repo, i.title, body, number, i.labels);
+        final res = await apiClient.createIssue(
+            owner, repo, i.title, body, number, i.labels);
         logger.success('Created issue #${res['number']}: "${i.title}"');
         issuesCreatedCount++;
       } catch (e) {
@@ -313,7 +330,8 @@ class BootstrapService {
       final number = milestoneMap[configI.milestone];
       final body = yamlParser.formatIssueBody(configI);
       try {
-        await apiClient.updateIssue(owner, repo, issueNumber, configI.title, body, number, configI.labels);
+        await apiClient.updateIssue(owner, repo, issueNumber, configI.title,
+            body, number, configI.labels);
         logger.success('Updated issue #$issueNumber: "${configI.title}"');
         issuesUpdatedCount++;
       } catch (e) {
@@ -357,7 +375,8 @@ class BootstrapService {
     required String repo,
     required String token,
   }) async {
-    logger.info('Executing Verify Alignment between config and remote repository...');
+    logger.info(
+        'Executing Verify Alignment between config and remote repository...');
 
     final valResult = await validationService.validate(
       config,
@@ -396,7 +415,8 @@ class BootstrapService {
     print('Milestones:');
     for (final configM in config.milestones) {
       final match = existingMilestones.firstWhere(
-        (m) => m['title'].toString().toLowerCase() == configM.title.toLowerCase(),
+        (m) =>
+            m['title'].toString().toLowerCase() == configM.title.toLowerCase(),
         orElse: () => const {},
       );
 
@@ -407,7 +427,8 @@ class BootstrapService {
         final currentDesc = match['description'] as String? ?? '';
         final currentDue = match['due_on'] as String? ?? '';
 
-        if (currentDesc != configM.description || _isDueDateDifferent(configM.dueOn, currentDue)) {
+        if (currentDesc != configM.description ||
+            _isDueDateDifferent(configM.dueOn, currentDue)) {
           logger.warning('  [DIFFERENT] Milestone: "${configM.title}"');
           isAligned = false;
         } else {
@@ -419,7 +440,8 @@ class BootstrapService {
     // Labels Verify
     print('\nLabels:');
     for (final configL in config.labels) {
-      final normalizedConfigColor = configL.color.replaceAll('#', '').toLowerCase();
+      final normalizedConfigColor =
+          configL.color.replaceAll('#', '').toLowerCase();
       final match = existingLabels.firstWhere(
         (l) => l['name'].toString().toLowerCase() == configL.name.toLowerCase(),
         orElse: () => const {},
@@ -432,7 +454,8 @@ class BootstrapService {
         final currentColor = (match['color'] as String? ?? '').toLowerCase();
         final currentDesc = (match['description'] as String? ?? '');
 
-        if (currentColor != normalizedConfigColor || currentDesc != configL.description) {
+        if (currentColor != normalizedConfigColor ||
+            currentDesc != configL.description) {
           logger.warning('  [DIFFERENT] Label: "${configL.name}"');
           isAligned = false;
         } else {
@@ -445,7 +468,8 @@ class BootstrapService {
     print('\nIssues:');
     for (final configI in config.issues) {
       final match = existingIssues.firstWhere(
-        (i) => i['title'].toString().toLowerCase() == configI.title.toLowerCase(),
+        (i) =>
+            i['title'].toString().toLowerCase() == configI.title.toLowerCase(),
         orElse: () => const {},
       );
 
@@ -454,18 +478,21 @@ class BootstrapService {
         isAligned = false;
       } else {
         final currentBody = _normalizeString(match['body'] as String? ?? '');
-        final expectedBody = _normalizeString(yamlParser.formatIssueBody(configI));
+        final expectedBody =
+            _normalizeString(yamlParser.formatIssueBody(configI));
         bool bodyDiffers = currentBody != expectedBody;
 
         final milestoneObj = match['milestone'] as Map<String, dynamic>?;
         final currentMilestoneTitle = milestoneObj?['title'] as String? ?? '';
-        bool milestoneDiffers = currentMilestoneTitle.toLowerCase() != configI.milestone.toLowerCase();
+        bool milestoneDiffers = currentMilestoneTitle.toLowerCase() !=
+            configI.milestone.toLowerCase();
 
         final currentLabels = (match['labels'] as List<dynamic>?)
                 ?.map((l) => l['name'].toString().toLowerCase())
                 .toSet() ??
             <String>{};
-        final expectedLabels = configI.labels.map((l) => l.toLowerCase()).toSet();
+        final expectedLabels =
+            configI.labels.map((l) => l.toLowerCase()).toSet();
         bool labelsDiffer = !_isSetEqual(currentLabels, expectedLabels);
 
         if (bodyDiffers || milestoneDiffers || labelsDiffer) {
@@ -502,15 +529,17 @@ class BootstrapService {
         final title = milestone['title'] as String;
         if (title.startsWith(prefix)) {
           final milestoneNumber = milestone['number'] as int;
-          
+
           for (final issue in existingIssues) {
             final milestoneObj = issue['milestone'] as Map<String, dynamic>?;
-            if (milestoneObj != null && milestoneObj['number'] == milestoneNumber) {
+            if (milestoneObj != null &&
+                milestoneObj['number'] == milestoneNumber) {
               final state = issue['state'] as String;
               if (state != 'closed') {
                 final issueNumber = issue['number'] as int;
                 await apiClient.closeIssue(owner, repo, issueNumber);
-                logger.success('Closed issue #$issueNumber: "${issue['title']}"');
+                logger
+                    .success('Closed issue #$issueNumber: "${issue['title']}"');
                 closedIssues++;
               }
             }
@@ -532,7 +561,8 @@ class BootstrapService {
       }
 
       logger.success('Delete Release complete.');
-      logger.bold('Summary: Deleted $deletedMilestones milestones, closed $closedIssues issues, deleted $deletedLabels labels.');
+      logger.bold(
+          'Summary: Deleted $deletedMilestones milestones, closed $closedIssues issues, deleted $deletedLabels labels.');
     } catch (e) {
       logger.error('Failed to execute delete release: $e');
       throw Exception('Delete release failed: $e');

@@ -14,9 +14,11 @@ class ProjectBlueprintService {
     ArchitectureRecommendationService? recommendationService,
     DeveloperSelectionService? selectionService,
     TechnologyCompatibilityService? compatibilityService,
-  })  : _recommendationService = recommendationService ?? ArchitectureRecommendationService(),
+  })  : _recommendationService =
+            recommendationService ?? ArchitectureRecommendationService(),
         _selectionService = selectionService ?? DeveloperSelectionService(),
-        _compatibilityService = compatibilityService ?? TechnologyCompatibilityService();
+        _compatibilityService =
+            compatibilityService ?? TechnologyCompatibilityService();
 
   Future<FinalProjectBlueprint> buildBlueprint(
     ProjectConfiguration config, {
@@ -48,7 +50,8 @@ class ProjectBlueprintService {
 
     final conflicts = _compatibilityService.getConflicts(compatibilityInput);
     if (conflicts.isNotEmpty) {
-      throw ArgumentError('Incompatible technology selection: ${conflicts.join(", ")}');
+      throw ArgumentError(
+          'Incompatible technology selection: ${conflicts.join(", ")}');
     }
 
     // 4. Return FinalProjectBlueprint

@@ -39,10 +39,11 @@ class ValidationService {
         final permInfo = await apiClient!.verifyTokenPermissions();
         final scopes = permInfo['scopes'] as String;
         final scopesList = scopes.split(',').map((s) => s.trim()).toList();
-        
+
         // If scopes are populated (classic token), check for 'repo'
         if (scopes.isNotEmpty && !scopesList.contains('repo')) {
-          errors.add('Insufficient token permissions. GITHUB_TOKEN requires the "repo" scope (Found: $scopes).');
+          errors.add(
+              'Insufficient token permissions. GITHUB_TOKEN requires the "repo" scope (Found: $scopes).');
         }
       } catch (e) {
         // If it throws ValidationException with 401, it is invalid token.
@@ -53,7 +54,8 @@ class ValidationService {
       try {
         final repoExists = await apiClient!.verifyRepository(owner, repo);
         if (!repoExists) {
-          errors.add('Repository $owner/$repo does not exist or is not accessible.');
+          errors.add(
+              'Repository $owner/$repo does not exist or is not accessible.');
         }
       } catch (e) {
         errors.add('Failed to verify repository connection: $e');
@@ -68,7 +70,8 @@ class ValidationService {
       } else {
         final lowerName = label.name.toLowerCase();
         if (labelNames.contains(lowerName)) {
-          errors.add('Duplicate label name found in YAML configuration: "${label.name}".');
+          errors.add(
+              'Duplicate label name found in YAML configuration: "${label.name}".');
         }
         labelNames.add(lowerName);
       }
@@ -85,7 +88,8 @@ class ValidationService {
       } else {
         final lowerTitle = milestone.title.toLowerCase();
         if (milestoneTitles.contains(lowerTitle)) {
-          errors.add('Duplicate milestone title found in YAML configuration: "${milestone.title}".');
+          errors.add(
+              'Duplicate milestone title found in YAML configuration: "${milestone.title}".');
         }
         milestoneTitles.add(lowerTitle);
       }
@@ -110,13 +114,15 @@ class ValidationService {
       if (issue.milestone.isEmpty) {
         errors.add('Issue "${issue.title}" is missing a milestone reference.');
       } else if (!milestoneTitles.contains(issue.milestone.toLowerCase())) {
-        errors.add('Issue "${issue.title}" references non-existent milestone: "${issue.milestone}".');
+        errors.add(
+            'Issue "${issue.title}" references non-existent milestone: "${issue.milestone}".');
       }
 
       // Verify labels reference
       for (final labelName in issue.labels) {
         if (!labelNames.contains(labelName.toLowerCase())) {
-          errors.add('Issue "${issue.title}" references non-existent label: "$labelName".');
+          errors.add(
+              'Issue "${issue.title}" references non-existent label: "$labelName".');
         }
       }
 

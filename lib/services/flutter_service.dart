@@ -22,10 +22,16 @@ class FlutterService {
     try {
       final result = await Process.run('flutter', ['--version']);
       if (result.exitCode != 0) {
-        throw ProcessException('flutter', ['--version'], 'Flutter command returned exit code ${result.exitCode}', result.exitCode);
+        throw ProcessException(
+            'flutter',
+            ['--version'],
+            'Flutter command returned exit code ${result.exitCode}',
+            result.exitCode);
       }
       final stdout = result.stdout as String;
-      final firstLine = stdout.split('\n').firstWhere((line) => line.trim().isNotEmpty, orElse: () => '');
+      final firstLine = stdout
+          .split('\n')
+          .firstWhere((line) => line.trim().isNotEmpty, orElse: () => '');
       if (firstLine.isEmpty) {
         throw const FormatException('Flutter version output was empty.');
       }

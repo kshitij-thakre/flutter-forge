@@ -26,10 +26,10 @@ void main() async {
     sessionStrategy: 'Persistent Session',
     environmentStrategy: 'Environment Configuration',
   );
-  
+
   final riverpodMeta = await generator.generate(tempDir, riverpodBlueprint);
   print('Riverpod Meta: $riverpodMeta');
-  
+
   final riverpodFile = File('$tempDir/lib/core/state/provider_observer.dart');
   if (!await riverpodFile.exists()) {
     print('FAILED: Riverpod file provider_observer.dart was not created.');
@@ -50,10 +50,10 @@ void main() async {
     sessionStrategy: 'Persistent Session',
     environmentStrategy: 'Environment Configuration',
   );
-  
+
   final blocMeta = await generator.generate(tempDir, blocBlueprint);
   print('Bloc Meta: $blocMeta');
-  
+
   final blocFile = File('$tempDir/lib/core/state/bloc_observer.dart');
   if (!await blocFile.exists()) {
     print('FAILED: Bloc file bloc_observer.dart was not created.');
@@ -70,10 +70,10 @@ void main() async {
     sessionStrategy: 'Persistent Session',
     environmentStrategy: 'Environment Configuration',
   );
-  
+
   final providerMeta = await generator.generate(tempDir, providerBlueprint);
   print('Provider Meta: $providerMeta');
-  
+
   final providerFile = File('$tempDir/lib/core/state/base_notifier.dart');
   if (!await providerFile.exists()) {
     print('FAILED: Provider file base_notifier.dart was not created.');
@@ -90,10 +90,10 @@ void main() async {
     sessionStrategy: 'Persistent Session',
     environmentStrategy: 'Environment Configuration',
   );
-  
+
   final getxMeta = await generator.generate(tempDir, getxBlueprint);
   print('GetX Meta: $getxMeta');
-  
+
   final getxFile = File('$tempDir/lib/core/state/base_controller.dart');
   if (!await getxFile.exists()) {
     print('FAILED: GetX file base_controller.dart was not created.');
@@ -108,7 +108,8 @@ void main() async {
     print('FAILED: Generated dependency metadata did not diverge.');
     exit(1);
   }
-  print('PASSED: Different inputs correctly result in different files and metadata.\n');
+  print(
+      'PASSED: Different inputs correctly result in different files and metadata.\n');
 
   // Test 6: Invalid support checks
   print('6. Verifying invalid inputs throw validation errors...');

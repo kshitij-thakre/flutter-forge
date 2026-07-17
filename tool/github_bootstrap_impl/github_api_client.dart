@@ -37,16 +37,19 @@ class GitHubApiClient {
     final status = response.statusCode;
     if (status == 403 || status == 429) {
       final delay = _getRateLimitDelay(response.headers);
-      throw RateLimitException(delay, 'GitHub API Rate Limit Exceeded or Access Forbidden.');
+      throw RateLimitException(
+          delay, 'GitHub API Rate Limit Exceeded or Access Forbidden.');
     }
     if (status == 400 || status == 401 || status == 422) {
-      throw ValidationException(status, 'GitHub Validation/Client Error: ${response.body}');
+      throw ValidationException(
+          status, 'GitHub Validation/Client Error: ${response.body}');
     }
     if (status >= 500) {
       throw TransientException(status, 'GitHub Server Error: ${response.body}');
     }
     if (status >= 400) {
-      throw HttpException('GitHub API Error (Status $status): ${response.body}');
+      throw HttpException(
+          'GitHub API Error (Status $status): ${response.body}');
     }
   }
 
@@ -131,90 +134,107 @@ class GitHubApiClient {
     });
   }
 
-  Future<List<Map<String, dynamic>>> getMilestones(String owner, String repo) async {
+  Future<List<Map<String, dynamic>>> getMilestones(
+      String owner, String repo) async {
     return retryHandler.execute(() async {
-      final initialUrl = 'https://api.github.com/repos/$owner/$repo/milestones?state=all&per_page=100';
+      final initialUrl =
+          'https://api.github.com/repos/$owner/$repo/milestones?state=all&per_page=100';
       return await _fetchPagedList(initialUrl);
     });
   }
 
   Future<Map<String, dynamic>> createMilestone(
-      String owner, String repo, String title, String description, {String? dueOn}) async {
+      String owner, String repo, String title, String description,
+      {String? dueOn}) async {
     return retryHandler.execute(() async {
-      final response = await client.post(
-        Uri.parse('https://api.github.com/repos/$owner/$repo/milestones'),
-        headers: _headers,
-        body: jsonEncode({
-          'title': title,
-          'description': description,
-          if (dueOn != null && dueOn.isNotEmpty) 'due_on': dueOn,
-        }),
-      ).timeout(timeout);
+      final response = await client
+          .post(
+            Uri.parse('https://api.github.com/repos/$owner/$repo/milestones'),
+            headers: _headers,
+            body: jsonEncode({
+              'title': title,
+              'description': description,
+              if (dueOn != null && dueOn.isNotEmpty) 'due_on': dueOn,
+            }),
+          )
+          .timeout(timeout);
       await _checkResponse(response);
       return jsonDecode(response.body) as Map<String, dynamic>;
     });
   }
 
   Future<Map<String, dynamic>> updateMilestone(
-      String owner, String repo, int number, String title, String description, {String? dueOn}) async {
+      String owner, String repo, int number, String title, String description,
+      {String? dueOn}) async {
     return retryHandler.execute(() async {
-      final response = await client.patch(
-        Uri.parse('https://api.github.com/repos/$owner/$repo/milestones/$number'),
-        headers: _headers,
-        body: jsonEncode({
-          'title': title,
-          'description': description,
-          'due_on': (dueOn != null && dueOn.isNotEmpty) ? dueOn : null,
-        }),
-      ).timeout(timeout);
+      final response = await client
+          .patch(
+            Uri.parse(
+                'https://api.github.com/repos/$owner/$repo/milestones/$number'),
+            headers: _headers,
+            body: jsonEncode({
+              'title': title,
+              'description': description,
+              'due_on': (dueOn != null && dueOn.isNotEmpty) ? dueOn : null,
+            }),
+          )
+          .timeout(timeout);
       await _checkResponse(response);
       return jsonDecode(response.body) as Map<String, dynamic>;
     });
   }
 
-  Future<List<Map<String, dynamic>>> getLabels(String owner, String repo) async {
+  Future<List<Map<String, dynamic>>> getLabels(
+      String owner, String repo) async {
     return retryHandler.execute(() async {
-      final initialUrl = 'https://api.github.com/repos/$owner/$repo/labels?per_page=100';
+      final initialUrl =
+          'https://api.github.com/repos/$owner/$repo/labels?per_page=100';
       return await _fetchPagedList(initialUrl);
     });
   }
 
-  Future<Map<String, dynamic>> createLabel(
-      String owner, String repo, String name, String color, String description) async {
+  Future<Map<String, dynamic>> createLabel(String owner, String repo,
+      String name, String color, String description) async {
     return retryHandler.execute(() async {
-      final response = await client.post(
-        Uri.parse('https://api.github.com/repos/$owner/$repo/labels'),
-        headers: _headers,
-        body: jsonEncode({
-          'name': name,
-          'color': color.replaceAll('#', ''),
-          'description': description,
-        }),
-      ).timeout(timeout);
+      final response = await client
+          .post(
+            Uri.parse('https://api.github.com/repos/$owner/$repo/labels'),
+            headers: _headers,
+            body: jsonEncode({
+              'name': name,
+              'color': color.replaceAll('#', ''),
+              'description': description,
+            }),
+          )
+          .timeout(timeout);
       await _checkResponse(response);
       return jsonDecode(response.body) as Map<String, dynamic>;
     });
   }
 
-  Future<Map<String, dynamic>> updateLabel(
-      String owner, String repo, String name, String color, String description) async {
+  Future<Map<String, dynamic>> updateLabel(String owner, String repo,
+      String name, String color, String description) async {
     return retryHandler.execute(() async {
-      final response = await client.patch(
-        Uri.parse('https://api.github.com/repos/$owner/$repo/labels/$name'),
-        headers: _headers,
-        body: jsonEncode({
-          'color': color.replaceAll('#', ''),
-          'description': description,
-        }),
-      ).timeout(timeout);
+      final response = await client
+          .patch(
+            Uri.parse('https://api.github.com/repos/$owner/$repo/labels/$name'),
+            headers: _headers,
+            body: jsonEncode({
+              'color': color.replaceAll('#', ''),
+              'description': description,
+            }),
+          )
+          .timeout(timeout);
       await _checkResponse(response);
       return jsonDecode(response.body) as Map<String, dynamic>;
     });
   }
 
-  Future<List<Map<String, dynamic>>> getIssues(String owner, String repo) async {
+  Future<List<Map<String, dynamic>>> getIssues(
+      String owner, String repo) async {
     return retryHandler.execute(() async {
-      final initialUrl = 'https://api.github.com/repos/$owner/$repo/issues?state=all&per_page=100';
+      final initialUrl =
+          'https://api.github.com/repos/$owner/$repo/issues?state=all&per_page=100';
       return await _fetchPagedList(initialUrl);
     });
   }
@@ -228,16 +248,18 @@ class GitHubApiClient {
     List<String> labels,
   ) async {
     return retryHandler.execute(() async {
-      final response = await client.post(
-        Uri.parse('https://api.github.com/repos/$owner/$repo/issues'),
-        headers: _headers,
-        body: jsonEncode({
-          'title': title,
-          'body': body,
-          'milestone': milestoneNumber,
-          'labels': labels,
-        }),
-      ).timeout(timeout);
+      final response = await client
+          .post(
+            Uri.parse('https://api.github.com/repos/$owner/$repo/issues'),
+            headers: _headers,
+            body: jsonEncode({
+              'title': title,
+              'body': body,
+              'milestone': milestoneNumber,
+              'labels': labels,
+            }),
+          )
+          .timeout(timeout);
       await _checkResponse(response);
       return jsonDecode(response.body) as Map<String, dynamic>;
     });
@@ -253,16 +275,19 @@ class GitHubApiClient {
     List<String> labels,
   ) async {
     return retryHandler.execute(() async {
-      final response = await client.patch(
-        Uri.parse('https://api.github.com/repos/$owner/$repo/issues/$issueNumber'),
-        headers: _headers,
-        body: jsonEncode({
-          'title': title,
-          'body': body,
-          'milestone': milestoneNumber,
-          'labels': labels,
-        }),
-      ).timeout(timeout);
+      final response = await client
+          .patch(
+            Uri.parse(
+                'https://api.github.com/repos/$owner/$repo/issues/$issueNumber'),
+            headers: _headers,
+            body: jsonEncode({
+              'title': title,
+              'body': body,
+              'milestone': milestoneNumber,
+              'labels': labels,
+            }),
+          )
+          .timeout(timeout);
       await _checkResponse(response);
       return jsonDecode(response.body) as Map<String, dynamic>;
     });
@@ -271,7 +296,8 @@ class GitHubApiClient {
   Future<void> deleteMilestone(String owner, String repo, int number) async {
     await retryHandler.execute(() async {
       final response = await client.delete(
-        Uri.parse('https://api.github.com/repos/$owner/$repo/milestones/$number'),
+        Uri.parse(
+            'https://api.github.com/repos/$owner/$repo/milestones/$number'),
         headers: _headers,
       );
       await _checkResponse(response);
@@ -280,11 +306,14 @@ class GitHubApiClient {
 
   Future<void> closeIssue(String owner, String repo, int issueNumber) async {
     await retryHandler.execute(() async {
-      final response = await client.patch(
-        Uri.parse('https://api.github.com/repos/$owner/$repo/issues/$issueNumber'),
-        headers: _headers,
-        body: jsonEncode({'state': 'closed'}),
-      ).timeout(timeout);
+      final response = await client
+          .patch(
+            Uri.parse(
+                'https://api.github.com/repos/$owner/$repo/issues/$issueNumber'),
+            headers: _headers,
+            body: jsonEncode({'state': 'closed'}),
+          )
+          .timeout(timeout);
       await _checkResponse(response);
     });
   }

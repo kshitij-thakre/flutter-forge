@@ -32,7 +32,8 @@ void main() async {
 
   final persistentFile = File('$tempDir/lib/core/session/session_manager.dart');
   if (!await persistentFile.exists()) {
-    print('FAILED: Persistent Session file session_manager.dart was not created.');
+    print(
+        'FAILED: Persistent Session file session_manager.dart was not created.');
     exit(1);
   }
   if (!persistentMeta['packagesToAdd'].contains('flutter_secure_storage')) {
@@ -54,9 +55,11 @@ void main() async {
   final secureMeta = await generator.generate(tempDir, secureBlueprint);
   print('Secure Storage Meta: $secureMeta');
 
-  final secureFile = File('$tempDir/lib/core/session/secure_storage_service.dart');
+  final secureFile =
+      File('$tempDir/lib/core/session/secure_storage_service.dart');
   if (!await secureFile.exists()) {
-    print('FAILED: Secure Storage file secure_storage_service.dart was not created.');
+    print(
+        'FAILED: Secure Storage file secure_storage_service.dart was not created.');
     exit(1);
   }
   if (!secureMeta['packagesToAdd'].contains('flutter_secure_storage')) {
@@ -80,7 +83,8 @@ void main() async {
 
   final prefsFile = File('$tempDir/lib/core/session/preferences_service.dart');
   if (!await prefsFile.exists()) {
-    print('FAILED: Shared Preferences file preferences_service.dart was not created.');
+    print(
+        'FAILED: Shared Preferences file preferences_service.dart was not created.');
     exit(1);
   }
   if (!prefsMeta['packagesToAdd'].contains('shared_preferences')) {
@@ -102,9 +106,11 @@ void main() async {
   final memoryMeta = await generator.generate(tempDir, memoryBlueprint);
   print('Memory Session Meta: $memoryMeta');
 
-  final memoryFile = File('$tempDir/lib/core/session/memory_session_store.dart');
+  final memoryFile =
+      File('$tempDir/lib/core/session/memory_session_store.dart');
   if (!await memoryFile.exists()) {
-    print('FAILED: Memory Session file memory_session_store.dart was not created.');
+    print(
+        'FAILED: Memory Session file memory_session_store.dart was not created.');
     exit(1);
   }
   if (memoryMeta['packagesToAdd'].isNotEmpty) {
@@ -120,7 +126,8 @@ void main() async {
     print('FAILED: Generated dependency metadata did not diverge.');
     exit(1);
   }
-  print('PASSED: Different inputs correctly result in different files and metadata.\n');
+  print(
+      'PASSED: Different inputs correctly result in different files and metadata.\n');
 
   // Test 6: Invalid support checks
   print('6. Verifying invalid inputs throw validation errors...');

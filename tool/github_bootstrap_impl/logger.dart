@@ -46,14 +46,19 @@ class Logger {
     bool isDryRun = false,
   }) {
     print('\n==================================================');
-    bold(isDryRun ? '          Dry Run Validation Summary' : '          Execution Summary');
+    bold(isDryRun
+        ? '          Dry Run Validation Summary'
+        : '          Execution Summary');
     print('==================================================');
-    print('Milestones Synced (Created/Updated):  $milestonesCreated / $milestonesUpdated');
-    print('Labels Synced (Created/Updated):      $labelsCreated / $labelsUpdated');
+    print(
+        'Milestones Synced (Created/Updated):  $milestonesCreated / $milestonesUpdated');
+    print(
+        'Labels Synced (Created/Updated):      $labelsCreated / $labelsUpdated');
     print('Issues Synced (Created):              $issuesCreated');
     print('Warnings:                             $warningsCount');
     print('Errors:                               $errorsCount');
-    print('Execution Time:                       ${duration.inMilliseconds} ms');
+    print(
+        'Execution Time:                       ${duration.inMilliseconds} ms');
     print('==================================================\n');
   }
 

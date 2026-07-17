@@ -27,30 +27,35 @@ void main() async {
   print('1. Verifying blueprint generation with accepted recommendations...');
   final FinalProjectBlueprint blueprint = await service.buildBlueprint(config);
   print(blueprint);
-  
+
   if (blueprint.stateManagement != 'Riverpod' ||
       blueprint.routing != 'Go Router' ||
       blueprint.sessionStrategy != 'Persistent session architecture' ||
       blueprint.environmentStrategy != 'Environment configuration setup') {
-    print('FAILED: Blueprint generated does not match expected recommendations.');
+    print(
+        'FAILED: Blueprint generated does not match expected recommendations.');
     exit(1);
   }
   print('PASSED: Blueprint generation successfully completed.\n');
 
   // Test 2: Blueprint overrides work (with custom selections)
   print('2. Verifying custom overrides are applied...');
-  final FinalProjectBlueprint overriddenBlueprint = await service.buildBlueprint(
+  final FinalProjectBlueprint overriddenBlueprint =
+      await service.buildBlueprint(
     config,
     overrideStateManagement: 'Bloc',
     overrideRouting: 'Navigation 2.0',
   );
   print(overriddenBlueprint);
-  
+
   if (overriddenBlueprint.stateManagement != 'Bloc' ||
       overriddenBlueprint.routing != 'Navigation 2.0' ||
-      overriddenBlueprint.sessionStrategy != 'Persistent session architecture' ||
-      overriddenBlueprint.environmentStrategy != 'Environment configuration setup') {
-    print('FAILED: Custom overrides did not register or preserve default fallbacks.');
+      overriddenBlueprint.sessionStrategy !=
+          'Persistent session architecture' ||
+      overriddenBlueprint.environmentStrategy !=
+          'Environment configuration setup') {
+    print(
+        'FAILED: Custom overrides did not register or preserve default fallbacks.');
     exit(1);
   }
   print('PASSED: Custom overrides verified.\n');

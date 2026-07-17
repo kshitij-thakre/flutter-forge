@@ -94,7 +94,8 @@ void main() {
         expect(result.errors.first, contains('GITHUB_TOKEN is not set'));
       });
 
-      test('Validation fails if duplicate labels are defined in YAML config', () async {
+      test('Validation fails if duplicate labels are defined in YAML config',
+          () async {
         final mockConfig = const RoadmapConfig(
           version: 3.0,
           milestones: [],
@@ -105,12 +106,16 @@ void main() {
           issues: [],
         );
 
-        final result = await validationService.validate(mockConfig, token: 'token');
+        final result =
+            await validationService.validate(mockConfig, token: 'token');
         expect(result.isValid, isFalse);
-        expect(result.errors, anyElement(contains('Duplicate label name found')));
+        expect(
+            result.errors, anyElement(contains('Duplicate label name found')));
       });
 
-      test('Validation fails if duplicate milestones are defined in YAML config', () async {
+      test(
+          'Validation fails if duplicate milestones are defined in YAML config',
+          () async {
         final mockConfig = const RoadmapConfig(
           version: 3.0,
           milestones: [
@@ -121,12 +126,16 @@ void main() {
           issues: [],
         );
 
-        final result = await validationService.validate(mockConfig, token: 'token');
+        final result =
+            await validationService.validate(mockConfig, token: 'token');
         expect(result.isValid, isFalse);
-        expect(result.errors, anyElement(contains('Duplicate milestone title found')));
+        expect(result.errors,
+            anyElement(contains('Duplicate milestone title found')));
       });
 
-      test('Validation fails if issue milestone references non-existent milestone', () async {
+      test(
+          'Validation fails if issue milestone references non-existent milestone',
+          () async {
         final mockConfig = const RoadmapConfig(
           version: 3.0,
           milestones: [
@@ -161,17 +170,20 @@ void main() {
         );
 
         expect(result.isValid, isFalse);
-        expect(result.errors, anyElement(contains('references non-existent milestone')));
+        expect(result.errors,
+            anyElement(contains('references non-existent milestone')));
       });
 
-      test('Validation fails if issue labels reference non-existent labels', () async {
+      test('Validation fails if issue labels reference non-existent labels',
+          () async {
         final mockConfig = const RoadmapConfig(
           version: 3.0,
           milestones: [
             MilestoneConfig(title: 'Milestone', description: 'desc'),
           ],
           labels: [
-            LabelConfig(name: 'real-label', color: 'ff0000', description: 'desc'),
+            LabelConfig(
+                name: 'real-label', color: 'ff0000', description: 'desc'),
           ],
           issues: [
             IssueConfig(
@@ -201,7 +213,8 @@ void main() {
         );
 
         expect(result.isValid, isFalse);
-        expect(result.errors, anyElement(contains('references non-existent label')));
+        expect(result.errors,
+            anyElement(contains('references non-existent label')));
       });
 
       test('Validation fails if duplicate issue titles are found', () async {
@@ -255,12 +268,15 @@ void main() {
         );
 
         expect(result.isValid, isFalse);
-        expect(result.errors, anyElement(contains('Duplicate issue title found')));
+        expect(
+            result.errors, anyElement(contains('Duplicate issue title found')));
       });
     });
 
     group('Retry Handler Tests', () {
-      test('RetryHandler retries on RateLimitException, TransientException, and TimeoutException', () async {
+      test(
+          'RetryHandler retries on RateLimitException, TransientException, and TimeoutException',
+          () async {
         final retryHandler = RetryHandler(silentLogger);
         int calls = 0;
 
@@ -306,7 +322,9 @@ void main() {
           if (mockCalls == 1) {
             return http.Response('Rate limit exceeded', 403, headers: {
               'x-ratelimit-remaining': '0',
-              'x-ratelimit-reset': (DateTime.now().millisecondsSinceEpoch ~/ 1000 + 1).toString(),
+              'x-ratelimit-reset':
+                  (DateTime.now().millisecondsSinceEpoch ~/ 1000 + 1)
+                      .toString(),
             });
           }
           return http.Response('{"name": "test-repo"}', 200);
@@ -324,7 +342,9 @@ void main() {
         expect(mockCalls, equals(2));
       });
 
-      test('GitHubApiClient parses Link headers and fetches multiple pages recursively', () async {
+      test(
+          'GitHubApiClient parses Link headers and fetches multiple pages recursively',
+          () async {
         int mockCalls = 0;
         final mockClient = MockClient((request) async {
           mockCalls++;
@@ -335,7 +355,8 @@ void main() {
                 '[{"number": 1, "title": "Page 1 Issue"}]',
                 200,
                 headers: {
-                  'link': '<https://api.github.com/repos/owner/repo/issues?page=2>; rel="next"',
+                  'link':
+                      '<https://api.github.com/repos/owner/repo/issues?page=2>; rel="next"',
                 },
               );
             } else if (mockCalls == 2) {
@@ -362,7 +383,9 @@ void main() {
         expect(mockCalls, equals(2));
       });
 
-      test('BootstrapService sync compares attributes and issues PATCH updates when different', () async {
+      test(
+          'BootstrapService sync compares attributes and issues PATCH updates when different',
+          () async {
         final patchCalls = <String, List<dynamic>>{};
         final mockClient = MockClient((request) async {
           final path = request.url.path;
@@ -372,10 +395,13 @@ void main() {
             return http.Response('{"name":"repo"}', 200);
           }
           if (path.endsWith('/user')) {
-            return http.Response('{"login":"user"}', 200, headers: {'x-oauth-scopes': 'repo'});
+            return http.Response('{"login":"user"}', 200,
+                headers: {'x-oauth-scopes': 'repo'});
           }
           if (path.endsWith('/milestones')) {
-            return http.Response('[{"title": "M1", "number": 1, "description": "old desc", "due_on": "2026-06-30T00:00:00Z"}]', 200);
+            return http.Response(
+                '[{"title": "M1", "number": 1, "description": "old desc", "due_on": "2026-06-30T00:00:00Z"}]',
+                200);
           }
           if (path.endsWith('/milestones/1')) {
             if (method == 'PATCH') {
@@ -384,7 +410,9 @@ void main() {
             }
           }
           if (path.endsWith('/labels')) {
-            return http.Response('[{"name": "label-1", "color": "000000", "description": "old description"}]', 200);
+            return http.Response(
+                '[{"name": "label-1", "color": "000000", "description": "old description"}]',
+                200);
           }
           if (path.endsWith('/labels/label-1')) {
             if (method == 'PATCH') {
@@ -393,7 +421,9 @@ void main() {
             }
           }
           if (path.endsWith('/issues')) {
-            return http.Response('[{"number": 100, "title": "Test Issue", "body": "old body", "milestone": {"title": "M1"}, "labels": [{"name": "label-1"}]}]', 200);
+            return http.Response(
+                '[{"number": 100, "title": "Test Issue", "body": "old body", "milestone": {"title": "M1"}, "labels": [{"name": "label-1"}]}]',
+                200);
           }
           if (path.endsWith('/issues/100')) {
             if (method == 'PATCH') {
@@ -421,10 +451,16 @@ void main() {
         final mockConfig = const RoadmapConfig(
           version: 3.0,
           milestones: [
-            MilestoneConfig(title: 'M1', description: 'new desc', dueOn: '2026-06-30T00:00:00Z'),
+            MilestoneConfig(
+                title: 'M1',
+                description: 'new desc',
+                dueOn: '2026-06-30T00:00:00Z'),
           ],
           labels: [
-            LabelConfig(name: 'label-1', color: 'ffffff', description: 'new description'),
+            LabelConfig(
+                name: 'label-1',
+                color: 'ffffff',
+                description: 'new description'),
           ],
           issues: [
             IssueConfig(
@@ -459,11 +495,16 @@ void main() {
         expect(patchCalls['issues'], isNotNull);
       });
 
-      test('BootstrapService runVerify returns true if aligned, and false if there are mismatches', () async {
+      test(
+          'BootstrapService runVerify returns true if aligned, and false if there are mismatches',
+          () async {
         final mockClient = MockClient((request) async {
           final path = request.url.path;
-          if (path.endsWith('/repos/owner/repo')) return http.Response('{"name":"repo"}', 200);
-          if (path.endsWith('/user')) return http.Response('{"login":"user"}', 200, headers: {'x-oauth-scopes': 'repo'});
+          if (path.endsWith('/repos/owner/repo'))
+            return http.Response('{"name":"repo"}', 200);
+          if (path.endsWith('/user'))
+            return http.Response('{"login":"user"}', 200,
+                headers: {'x-oauth-scopes': 'repo'});
           if (path.endsWith('/milestones')) return http.Response('[]', 200);
           if (path.endsWith('/labels')) return http.Response('[]', 200);
           if (path.endsWith('/issues')) return http.Response('[]', 200);

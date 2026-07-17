@@ -52,7 +52,7 @@ void main() {
 
   // Test 3: Invalid combinations fail & Conflict detection works
   print('3. Verifying invalid combinations fail and conflicts are detected...');
-  
+
   // Riverpod + incompatible routing (e.g. Auto Route)
   final invalidRouteConfig = TechnologyCompatibility(
     stateManagement: 'Riverpod',
@@ -100,7 +100,8 @@ void main() {
   // Test 4: Different combinations generate different results
   print('4. Verifying different combinations generate different results...');
   if (routeConflicts.join() == sessionConflicts.join()) {
-    print('FAILED: Different invalid combinations generated identical conflicts.');
+    print(
+        'FAILED: Different invalid combinations generated identical conflicts.');
     exit(1);
   }
   print('PASSED: Divergent combinations produce unique conflict lists.\n');

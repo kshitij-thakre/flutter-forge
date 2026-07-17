@@ -1,45 +1,69 @@
-/// Responsibility:
-/// Entry point for the Flutter Forge CLI tool.
-/// Parses command line arguments and dispatches commands.
-
 import 'dart:io';
+import 'package:args/args.dart';
+import 'package:ironship/commands/command_registry.dart';
 import 'package:ironship/commands/init_command.dart';
-import 'package:ironship/commands/add_feature_command.dart';
+import 'package:ironship/commands/help_command.dart';
+import 'package:ironship/commands/version_command.dart';
+import 'package:ironship/commands/doctor_command.dart';
+import 'package:ironship/commands/feature_command.dart';
+import 'package:ironship/commands/module_command.dart';
+import 'package:ironship/commands/blueprint_command.dart';
+import 'package:ironship/commands/docs_command.dart';
+import 'package:ironship/commands/score_command.dart';
 
 void main(List<String> arguments) async {
-  if (arguments.isEmpty) {
-    _printHelp();
-    exit(0);
-  }
+  final registry = CommandRegistry();
 
-  final command = arguments.first;
-  if (command == '--help' || command == '-h') {
-    _printHelp();
-    exit(0);
-  } else if (command == 'init') {
-    if (arguments.length < 2) {
-      print('Usage: forge init <project_name>');
-      exit(1);
-    }
-    final projectName = arguments[1];
-    await InitCommand.execute(projectName);
-  } else if (command == 'add') {
-    if (arguments.length < 3 || arguments[1] != 'feature') {
-      print('Usage: forge add feature <feature_name>');
-      exit(1);
-    }
-    final featureName = arguments[2];
-    await AddFeatureCommand.execute('.', featureName);
-  } else {
-    print('Unknown command: $command');
+  registry.register(InitCommand());
+  registry.register(HelpCommand(registry));
+  registry.register(VersionCommand());
+  registry.register(DoctorCommand());
+  registry.register(FeatureCommand());
+  registry.register(ModuleCommand());
+  registry.register(BlueprintCommand());
+  registry.register(DocsCommand());
+  registry.register(ScoreCommand());
+
+  final parser = ArgParser()
+    ..addFlag('help',
+        abbr: 'h', negatable: false, help: 'Show help information.')
+    ..addFlag('version', negatable: false, help: 'Show version information.');
+
+  ArgResults results;
+  try {
+    results = parser.parse(arguments);
+  } catch (e) {
+    print('Error: $e');
+    registry.printHelp();
     exit(1);
   }
-}
 
-void _printHelp() {
-  print('Ironship CLI\n');
-  print('Commands:\n');
-  print('forge init <project_name>\n');
-  print('Examples:\n');
-  print('forge init hospital_app');
+  if (results['help'] as bool) {
+    registry.printHelp();
+    exit(0);
+  }
+
+  if (results['version'] as bool) {
+    final version = await VersionCommand.getVersion();
+    print('Forge version: $version');
+    exit(0);
+  }
+
+  if (results.rest.isEmpty) {
+    registry.printHelp();
+    exit(0);
+  }
+
+  final cmdName = results.rest.first;
+  final cmdArgs = results.rest.sublist(1);
+
+  if (!registry.hasCommand(cmdName)) {
+    print('Error: Unknown command: $cmdName');
+    registry.printHelp();
+    exit(1);
+  }
+
+  final command = registry.getCommand(cmdName)!;
+  final exitCode = await command.execute(cmdArgs);
+  exit(exitCode);
 }

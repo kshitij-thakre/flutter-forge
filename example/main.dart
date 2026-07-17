@@ -5,10 +5,10 @@ void main() {
   print('Usage Checklist:');
   print('  1. Install CLI globally:');
   print('     \$ dart pub global activate ironship\n');
-  
+
   print('  2. Verify command line help:');
   print('     \$ forge --help\n');
-  
+
   print('  3. Initialize a new project:');
   print('     \$ forge init hospital_app\n');
 

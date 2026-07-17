@@ -116,11 +116,13 @@ void main() async {
 
   // Test 5: Divergent outputs based on inputs
   print('5. Verifying inputs generate divergent outputs...');
-  if (goRouterMeta['packagesToAdd'].first == beamerMeta['packagesToAdd'].first) {
+  if (goRouterMeta['packagesToAdd'].first ==
+      beamerMeta['packagesToAdd'].first) {
     print('FAILED: Generated dependency metadata did not diverge.');
     exit(1);
   }
-  print('PASSED: Different inputs correctly result in different files and metadata.\n');
+  print(
+      'PASSED: Different inputs correctly result in different files and metadata.\n');
 
   // Test 6: Invalid support checks
   print('6. Verifying invalid inputs throw validation errors...');

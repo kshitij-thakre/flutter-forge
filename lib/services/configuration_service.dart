@@ -22,7 +22,7 @@ class ConfigurationService {
 
   bool validate(ProjectConfiguration config) {
     if (config.projectName.trim().isEmpty) return false;
-    
+
     final reqs = config.requirements;
     if (reqs.stateManagement.trim().isEmpty) return false;
     if (reqs.routing.trim().isEmpty) return false;

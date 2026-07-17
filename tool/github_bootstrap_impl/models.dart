@@ -1,7 +1,8 @@
 class MilestoneConfig {
   final String title;
   final String description;
-  final String? dueOn; // Optional due date string (ISO-8601 format: e.g., YYYY-MM-DDTHH:MM:SSZ)
+  final String?
+      dueOn; // Optional due date string (ISO-8601 format: e.g., YYYY-MM-DDTHH:MM:SSZ)
 
   const MilestoneConfig({
     required this.title,
@@ -81,11 +82,16 @@ class IssueConfig {
       objective: map['objective'] as String? ?? '',
       background: map['background'] as String? ?? '',
       scope: map['scope'] as String? ?? '',
-      deliverables: (map['deliverables'] as List<dynamic>?)?.cast<String>() ?? const [],
-      acceptanceCriteria: (map['acceptanceCriteria'] as List<dynamic>?)?.cast<String>() ?? const [],
+      deliverables:
+          (map['deliverables'] as List<dynamic>?)?.cast<String>() ?? const [],
+      acceptanceCriteria:
+          (map['acceptanceCriteria'] as List<dynamic>?)?.cast<String>() ??
+              const [],
       outOfScope: map['outOfScope'] as String? ?? '',
       dependencies: map['dependencies'] as String? ?? '',
-      testingChecklist: (map['testingChecklist'] as List<dynamic>?)?.cast<String>() ?? const [],
+      testingChecklist:
+          (map['testingChecklist'] as List<dynamic>?)?.cast<String>() ??
+              const [],
       definitionOfDone: map['definitionOfDone'] as String? ?? '',
     );
   }

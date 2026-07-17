@@ -5,7 +5,6 @@ import 'package:ironship/models/project_configuration.dart';
 import 'package:ironship/models/final_project_blueprint.dart';
 import 'package:ironship/services/project_blueprint_service.dart';
 
-
 void main() async {
   print('Starting End-to-End Integration Engine Verification tests...\n');
 
@@ -27,14 +26,16 @@ void main() async {
     ),
   );
 
-  final smallBlueprint = await ProjectBlueprintService().buildBlueprint(smallConfig);
+  final smallBlueprint =
+      await ProjectBlueprintService().buildBlueprint(smallConfig);
   print(smallBlueprint);
-  
+
   if (smallBlueprint.stateManagement != 'Riverpod' ||
       smallBlueprint.routing != 'Navigation 2.0' ||
       smallBlueprint.sessionStrategy != 'No session storage required' ||
       smallBlueprint.environmentStrategy != 'Single environment setup') {
-    print('FAILED: Small App flow blueprint generated incorrect recommendations.');
+    print(
+        'FAILED: Small App flow blueprint generated incorrect recommendations.');
     exit(1);
   }
   print('PASSED: Small App flow blueprint verified successfully.\n');
@@ -55,14 +56,18 @@ void main() async {
     ),
   );
 
-  final enterpriseBlueprint = await ProjectBlueprintService().buildBlueprint(enterpriseConfig);
+  final enterpriseBlueprint =
+      await ProjectBlueprintService().buildBlueprint(enterpriseConfig);
   print(enterpriseBlueprint);
 
   if (enterpriseBlueprint.stateManagement != 'Riverpod' ||
       enterpriseBlueprint.routing != 'Go Router' ||
-      enterpriseBlueprint.sessionStrategy != 'Persistent session architecture' ||
-      enterpriseBlueprint.environmentStrategy != 'Environment configuration setup') {
-    print('FAILED: Enterprise App flow blueprint generated incorrect recommendations.');
+      enterpriseBlueprint.sessionStrategy !=
+          'Persistent session architecture' ||
+      enterpriseBlueprint.environmentStrategy !=
+          'Environment configuration setup') {
+    print(
+        'FAILED: Enterprise App flow blueprint generated incorrect recommendations.');
     exit(1);
   }
   print('PASSED: Enterprise App flow blueprint verified successfully.\n');
@@ -93,8 +98,10 @@ void main() async {
   if (overrideBlueprint.stateManagement != 'Bloc' ||
       overrideBlueprint.routing != 'Navigation 2.0' ||
       overrideBlueprint.sessionStrategy != 'Persistent session architecture' ||
-      overrideBlueprint.environmentStrategy != 'Environment configuration setup') {
-    print('FAILED: Developer Override did not override recommendations correctly.');
+      overrideBlueprint.environmentStrategy !=
+          'Environment configuration setup') {
+    print(
+        'FAILED: Developer Override did not override recommendations correctly.');
     exit(1);
   }
   print('PASSED: Developer Override flow verified successfully.\n');
@@ -118,13 +125,14 @@ void main() async {
   if (blueprint1.sessionStrategy.toLowerCase().contains('persistent session')) {
     packages.add('flutter_secure_storage');
   }
-  
+
   if (packages.length != 4 ||
       !packages.contains('dio') ||
       !packages.contains('flutter_riverpod') ||
       !packages.contains('go_router') ||
       !packages.contains('flutter_secure_storage')) {
-    print('FAILED: Package Aggregation logic collected incorrect packages: $packages');
+    print(
+        'FAILED: Package Aggregation logic collected incorrect packages: $packages');
     exit(1);
   }
   print('PASSED: Package Aggregation verified successfully.\n');
@@ -133,8 +141,9 @@ void main() async {
 
   // 5. Verify Compatibility Failures (instant validation failure, no flutter project created)
   print('5. Verifying compatibility failure flow via CLI execution...');
-  final failureProcess = await Process.start('dart', ['run', 'bin/forge.dart', 'init', 'fail_test_app']);
-  
+  final failureProcess = await Process.start(
+      'dart', ['run', 'bin/forge.dart', 'init', 'fail_test_app']);
+
   final inputs1 = [
     '4', // State management: Recommend for me
     '4', // Routing: Recommend for me
@@ -164,17 +173,20 @@ void main() async {
     print('Stderr Output: $stderr1');
   }
   if (!stdout1.contains('Compatibility validation failed:')) {
-    print('FAILED: Compatibility failure flow did not fail with validation error.');
+    print(
+        'FAILED: Compatibility failure flow did not fail with validation error.');
     print('Stdout:\n$stdout1');
     exit(1);
   }
-  
+
   final failDirectory = Directory('fail_test_app');
   if (await failDirectory.exists()) {
-    print('FAILED: Directory was created even though compatibility validation failed.');
+    print(
+        'FAILED: Directory was created even though compatibility validation failed.');
     exit(1);
   }
-  print('PASSED: Compatibility validation failure successfully terminated project creation.\n');
+  print(
+      'PASSED: Compatibility validation failure successfully terminated project creation.\n');
 
   // 6. Verify End-to-End Happy Path (creates a real project and installs dependencies once)
   print('6. Verifying E2E Happy Path flow via CLI execution...');
@@ -184,7 +196,8 @@ void main() async {
     await happyDirectory.delete(recursive: true);
   }
 
-  final happyProcess = await Process.start('dart', ['run', 'bin/forge.dart', 'init', appName]);
+  final happyProcess =
+      await Process.start('dart', ['run', 'bin/forge.dart', 'init', appName]);
   final inputs2 = [
     '4', // State management: Recommend for me -> Riverpod
     '4', // Routing: Recommend for me -> Navigation 2.0
@@ -193,7 +206,7 @@ void main() async {
     '2', // Auth: No
     '2', // Session: No
     '1', // Env: Dev only
-    'n'  // Override: No
+    'n' // Override: No
   ];
 
   for (final input in inputs2) {
@@ -203,7 +216,7 @@ void main() async {
 
   final exitCode2 = await happyProcess.exitCode;
   final stdout2 = await happyProcess.stdout.transform(utf8.decoder).join();
-  
+
   print('CLI Exit code: $exitCode2');
   if (exitCode2 != 0) {
     print('FAILED: Happy path process exited with non-zero code $exitCode2.');
@@ -218,9 +231,12 @@ void main() async {
     exit(1);
   }
 
-  final appExceptionFile = File('$appName/lib/core/exceptions/app_exception.dart');
-  final providerObserverFile = File('$appName/lib/core/state/provider_observer.dart');
-  final routerDelegateFile = File('$appName/lib/core/router/router_delegate.dart');
+  final appExceptionFile =
+      File('$appName/lib/core/exceptions/app_exception.dart');
+  final providerObserverFile =
+      File('$appName/lib/core/state/provider_observer.dart');
+  final routerDelegateFile =
+      File('$appName/lib/core/router/router_delegate.dart');
   final envFile = File('$appName/lib/core/config/env.dart');
 
   if (!await appExceptionFile.exists() ||
@@ -234,7 +250,8 @@ void main() async {
   // Verify pubspec dependency aggregation
   final pubspecFile = File('$appName/pubspec.yaml');
   final pubspecContent = await pubspecFile.readAsString();
-  if (!pubspecContent.contains('dio:') || !pubspecContent.contains('flutter_riverpod:')) {
+  if (!pubspecContent.contains('dio:') ||
+      !pubspecContent.contains('flutter_riverpod:')) {
     print('FAILED: dependencies aggregation missing from pubspec.yaml.');
     exit(1);
   }

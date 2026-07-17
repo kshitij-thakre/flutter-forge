@@ -28,18 +28,19 @@ class ChoiceQuestion extends Question {
       }
       stdout.write('Select option (1-${choices.length}): ');
       final input = stdin.readLineSync()?.trim();
-      
+
       if (input == null || input.isEmpty) {
         print('Input cannot be empty. Please try again.');
         continue;
       }
-      
+
       final index = int.tryParse(input);
       if (index == null || index < 1 || index > choices.length) {
-        print('Invalid option. Please enter a number between 1 and ${choices.length}.');
+        print(
+            'Invalid option. Please enter a number between 1 and ${choices.length}.');
         continue;
       }
-      
+
       return choices[index - 1];
     }
   }
@@ -59,7 +60,7 @@ class YesNoQuestion extends Question {
       print('  [2] No');
       stdout.write('Select option (1-2) or enter (y/n): ');
       final input = stdin.readLineSync()?.trim().toLowerCase();
-      
+
       if (input == null || input.isEmpty) {
         print('Input cannot be empty. Please try again.');
         continue;
@@ -87,7 +88,12 @@ class QuestionnaireService {
     ChoiceQuestion(
       text: 'Which routing solution would you like to use?',
       key: 'routing',
-      choices: ['Navigation 2.0', 'Go Router', 'Auto Route', 'Recommend for me'],
+      choices: [
+        'Navigation 2.0',
+        'Go Router',
+        'Auto Route',
+        'Recommend for me'
+      ],
     ),
     ChoiceQuestion(
       text: 'What type of application are you building?',

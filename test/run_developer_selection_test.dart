@@ -30,7 +30,8 @@ void main() {
   print('PASSED: Recommendation acceptance matches recommendations.\n');
 
   // Test 2: Recommendation override works & Final selection generation works
-  print('2. Verifying recommendation overrides and final selection generation...');
+  print(
+      '2. Verifying recommendation overrides and final selection generation...');
   final DeveloperSelection overridden = service.overrideSelection(
     recommendation,
     stateManagement: 'Bloc',
@@ -41,7 +42,8 @@ void main() {
       overridden.routing != 'Navigation 2.0' ||
       overridden.sessionStrategy != 'Persistent Session' ||
       overridden.environmentStrategy != 'Environment Configuration') {
-    print('FAILED: Overridden selections did not register overrides or fallback properly.');
+    print(
+        'FAILED: Overridden selections did not register overrides or fallback properly.');
     exit(1);
   }
   print('PASSED: Recommendation overrides working with correct fallbacks.\n');
@@ -50,7 +52,8 @@ void main() {
   print('3. Verifying different selections generate different outputs...');
   if (accepted.stateManagement == overridden.stateManagement ||
       accepted.routing == overridden.routing) {
-    print('FAILED: Accepted and overridden selections returned identical outputs.');
+    print(
+        'FAILED: Accepted and overridden selections returned identical outputs.');
     exit(1);
   }
   print('PASSED: Selection outputs successfully diverged.\n');

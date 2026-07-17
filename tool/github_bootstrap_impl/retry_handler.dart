@@ -10,7 +10,8 @@ class RateLimitException implements Exception {
   RateLimitException(this.retryAfterSeconds, this.message);
 
   @override
-  String toString() => 'RateLimitException: $message (Retry after $retryAfterSeconds seconds)';
+  String toString() =>
+      'RateLimitException: $message (Retry after $retryAfterSeconds seconds)';
 }
 
 class TransientException implements Exception {
@@ -46,7 +47,8 @@ class RetryHandler {
         }
 
         if (attempts >= maxRetries) {
-          logger.error('Max retry attempts ($maxRetries) reached. Failing with: $e');
+          logger.error(
+              'Max retry attempts ($maxRetries) reached. Failing with: $e');
           rethrow;
         }
 
@@ -54,18 +56,23 @@ class RetryHandler {
         int delaySeconds = 0;
         if (e is RateLimitException) {
           delaySeconds = e.retryAfterSeconds;
-          logger.warning('Rate limit hit. Retrying in $delaySeconds seconds... (Attempt $attempts/$maxRetries)');
+          logger.warning(
+              'Rate limit hit. Retrying in $delaySeconds seconds... (Attempt $attempts/$maxRetries)');
         } else if (e is TransientException) {
           delaySeconds = baseDelay.inSeconds * attempts;
-          logger.warning('Transient error (${e.statusCode}) encountered. Retrying in $delaySeconds seconds... (Attempt $attempts/$maxRetries)');
+          logger.warning(
+              'Transient error (${e.statusCode}) encountered. Retrying in $delaySeconds seconds... (Attempt $attempts/$maxRetries)');
         } else if (e is TimeoutException) {
           delaySeconds = baseDelay.inSeconds * attempts;
-          logger.warning('Request timed out. Retrying in $delaySeconds seconds... (Attempt $attempts/$maxRetries)');
+          logger.warning(
+              'Request timed out. Retrying in $delaySeconds seconds... (Attempt $attempts/$maxRetries)');
         } else if (e is SocketException || e is HttpException) {
           delaySeconds = baseDelay.inSeconds * attempts;
-          logger.warning('Network connection error: $e. Retrying in $delaySeconds seconds... (Attempt $attempts/$maxRetries)');
+          logger.warning(
+              'Network connection error: $e. Retrying in $delaySeconds seconds... (Attempt $attempts/$maxRetries)');
         } else {
-          logger.error('Unexpected exception encountered: $e. Aborting retries.');
+          logger
+              .error('Unexpected exception encountered: $e. Aborting retries.');
           rethrow;
         }
 

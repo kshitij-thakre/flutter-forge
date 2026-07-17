@@ -49,8 +49,10 @@ void main() async {
   print('3. Verifying Load functionality...');
   final loadedConfig = await service.load(tempFile);
   if (loadedConfig.projectName != originalConfig.projectName ||
-      loadedConfig.createdAt.toIso8601String() != originalConfig.createdAt.toIso8601String() ||
-      loadedConfig.requirements.stateManagement != originalConfig.requirements.stateManagement) {
+      loadedConfig.createdAt.toIso8601String() !=
+          originalConfig.createdAt.toIso8601String() ||
+      loadedConfig.requirements.stateManagement !=
+          originalConfig.requirements.stateManagement) {
     print('FAILED: Loaded configuration does not match original.');
     exit(1);
   }

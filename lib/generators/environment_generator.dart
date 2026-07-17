@@ -19,7 +19,8 @@ class EnvironmentGenerator {
   ) async {
     final environmentStrategy = blueprint.environmentStrategy;
     if (!supports(environmentStrategy)) {
-      throw ArgumentError('Unsupported environment strategy: $environmentStrategy');
+      throw ArgumentError(
+          'Unsupported environment strategy: $environmentStrategy');
     }
 
     final normalized = environmentStrategy.trim().toLowerCase();

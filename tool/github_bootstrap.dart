@@ -11,10 +11,18 @@ import 'github_bootstrap_impl/bootstrap_service.dart';
 
 void main(List<String> arguments) async {
   final parser = ArgParser()
-    ..addOption('config', abbr: 'c', defaultsTo: 'roadmaps/v3.yaml', help: 'Path to the roadmap YAML configuration file.')
-    ..addOption('owner', abbr: 'o', defaultsTo: 'kshitij-thakre', help: 'GitHub repository owner.')
-    ..addOption('repo', abbr: 'r', defaultsTo: 'flutter-forge', help: 'GitHub repository name.')
-    ..addFlag('help', abbr: 'h', negatable: false, help: 'Print CLI usage directions.');
+    ..addOption('config',
+        abbr: 'c',
+        defaultsTo: 'roadmaps/v3.yaml',
+        help: 'Path to the roadmap YAML configuration file.')
+    ..addOption('owner',
+        abbr: 'o',
+        defaultsTo: 'kshitij-thakre',
+        help: 'GitHub repository owner.')
+    ..addOption('repo',
+        abbr: 'r', defaultsTo: 'flutter-forge', help: 'GitHub repository name.')
+    ..addFlag('help',
+        abbr: 'h', negatable: false, help: 'Print CLI usage directions.');
 
   ArgResults argResults;
   try {
@@ -82,7 +90,8 @@ void main(List<String> arguments) async {
           logger.warning(warn);
         }
         if (result.isValid) {
-          logger.success('Validation completed successfully. Ready for bootstrap.');
+          logger.success(
+              'Validation completed successfully. Ready for bootstrap.');
           httpClient.close();
           exit(0);
         } else {
@@ -103,11 +112,13 @@ void main(List<String> arguments) async {
           token: token,
         );
         if (matches) {
-          logger.success('Repository is 100% aligned with the roadmap configuration.');
+          logger.success(
+              'Repository is 100% aligned with the roadmap configuration.');
           httpClient.close();
           exit(0);
         } else {
-          logger.error('Repository state is not aligned with the roadmap configuration.');
+          logger.error(
+              'Repository state is not aligned with the roadmap configuration.');
           httpClient.close();
           exit(1);
         }
@@ -139,12 +150,14 @@ void main(List<String> arguments) async {
       case 'delete-release':
         if (argResults.rest.length < 2) {
           logger.error('Missing target release version tag (e.g. 3.0).');
-          logger.info('Usage: dart run tool/github_bootstrap delete-release <version>');
+          logger.info(
+              'Usage: dart run tool/github_bootstrap delete-release <version>');
           httpClient.close();
           exit(1);
         }
         final versionTag = argResults.rest[1];
-        logger.bold('Syncing delete release targets for version tag $versionTag...');
+        logger.bold(
+            'Syncing delete release targets for version tag $versionTag...');
         await bootstrapService.deleteRelease(
           config: roadmapConfig,
           owner: owner,
@@ -172,11 +185,16 @@ void _printUsage(ArgParser parser) {
   print('GitHub Roadmap Bootstrap Tool\n');
   print('Usage: dart run tool/github_bootstrap <command> [options]\n');
   print('Commands:');
-  print('  validate          Validate token presence, API connection, and configuration checks.');
-  print('  verify            Compare current repository state with config and report alignment.');
-  print('  dry-run           Simulate syncing milestones, labels, and issue creation.');
-  print('  bootstrap         Sync milestones, labels, and populate issues directly on GitHub.');
-  print('  delete-release    Delete milestones and close issues associated with a release version.\n');
+  print(
+      '  validate          Validate token presence, API connection, and configuration checks.');
+  print(
+      '  verify            Compare current repository state with config and report alignment.');
+  print(
+      '  dry-run           Simulate syncing milestones, labels, and issue creation.');
+  print(
+      '  bootstrap         Sync milestones, labels, and populate issues directly on GitHub.');
+  print(
+      '  delete-release    Delete milestones and close issues associated with a release version.\n');
   print('Options:');
   print(parser.usage);
 }

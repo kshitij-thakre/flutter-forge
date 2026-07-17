@@ -56,7 +56,8 @@ void main() async {
   if (!await devProdEnvFile.exists() ||
       !await devProdDevFile.exists() ||
       !await devProdProdFile.exists()) {
-    print('FAILED: Dev + Production configuration files were not fully created.');
+    print(
+        'FAILED: Dev + Production configuration files were not fully created.');
     exit(1);
   }
   print('PASSED: Dev + Production generation successful.\n');
@@ -82,7 +83,8 @@ void main() async {
       !await fullEnvDevFile.exists() ||
       !await fullEnvStageFile.exists() ||
       !await fullEnvProdFile.exists()) {
-    print('FAILED: Dev + Stage + Production configuration files were not fully created.');
+    print(
+        'FAILED: Dev + Stage + Production configuration files were not fully created.');
     exit(1);
   }
   print('PASSED: Dev + Stage + Production generation successful.\n');
@@ -110,11 +112,13 @@ void main() async {
 
   // Test 5: Divergent outputs based on inputs
   print('5. Verifying inputs generate divergent outputs...');
-  if (devOnlyMeta['generatedFiles'].length == fullEnvMeta['generatedFiles'].length) {
+  if (devOnlyMeta['generatedFiles'].length ==
+      fullEnvMeta['generatedFiles'].length) {
     print('FAILED: Generated configuration lists did not diverge in size.');
     exit(1);
   }
-  print('PASSED: Different inputs correctly result in different files and metadata.\n');
+  print(
+      'PASSED: Different inputs correctly result in different files and metadata.\n');
 
   // Test 6: Invalid support checks
   print('6. Verifying invalid inputs throw validation errors...');
