@@ -75,16 +75,24 @@ Examples:
   ```
 * Once reviewed and approved, merge PRs using the **Squash and Merge** strategy. This groups all commits from the branch into a single structured Conventional Commit on the `main` branch. GitHub will automatically close the linked issue upon merging.
 
-### 4. Issue #32 Recovery Guidelines
+### 4. Issue #32 Recovery
 
-Since Issue #32 was implemented directly on `main`, contributors should follow this recovery process to maintain project traceability without altering historical commit hashes:
-1. Push any remaining local changes:
-   ```bash
-   git push origin main
-   ```
-2. Reference the target merge commit hash directly in the comments of Issue #32.
-3. Close Issue #32 manually via the GitHub issues UI.
-4. Begin working on Issue #33 using the standard feature branch lifecycle.
+Issue #32 predates the Feature Branch workflow.
+
+It was intentionally completed directly on main.
+
+All future issues MUST use
+
+```text
+feature/<issue>-<slug>
+     ↓
+Pull Request
+     ↓
+Merge
+     ↓
+Automatic issue closing
+```
+---
 
 ### 5. Developer Workflow Automation
 
